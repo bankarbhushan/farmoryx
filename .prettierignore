@@ -1,0 +1,22 @@
+# this file will not formate the below files formate
+
+# Node.js specific
+node_modules/
+dist/
+build/
+coverage/
+.env
+.DS_Store
+
+# Log files
+*.log
+
+# Editor specific
+.vscode/
+.idea/
+
+# Dotfiles (unless explicitly formatted)
+.*rc
+
+# Example of ignoring a specific file
+src/generated/my-generated-file.js
