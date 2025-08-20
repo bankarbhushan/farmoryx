@@ -6,6 +6,7 @@ const itemSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.String,
       ref: "Farmer",
       required: true,
+      index:true
     },
     nameMarathi: {
       type: mongoose.Schema.Types.String,

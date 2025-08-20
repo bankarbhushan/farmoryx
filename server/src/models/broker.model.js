@@ -10,6 +10,7 @@ const brokerSchema = new mongoose.Schema(
       lowercase: true,
       minLength: [2, "Name Shloud be greater then 2 charecter."],
       maxLength: [100, "You reach the name limit."],
+      index:true
     },
 
     phone: {
@@ -87,6 +88,9 @@ const brokerSchema = new mongoose.Schema(
       type: Date,
     },
 
+    refreshToken :{
+      type:String,
+    },
     resetPasswordToken: {
       type: String,
       select: false,
@@ -97,7 +101,7 @@ const brokerSchema = new mongoose.Schema(
       select: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true } // this will give you created at and updated at.
 );
 
 const Broker = mongoose.model("Broker", brokerSchema);

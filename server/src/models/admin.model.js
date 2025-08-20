@@ -10,6 +10,7 @@ const adminSchema = new mongoose.Schema(
       lowercase: true,
       minLength: [2, "Name should be greater than 2 characters."],
       maxLength: [100, "You reached the name limit."],
+      index:true // this is allow tot the search.
     },
     email: {
       type: String,

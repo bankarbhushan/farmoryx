@@ -16,6 +16,7 @@ const merchantSchema = new mongoose.Schema(
       lowercase: true,
       minLength: [2, "Name Shloud be greater then 2 charecter."],
       maxLength: [100, "You reach the name limit."],
+      index:true
     },
     phone: {
       type: String,
