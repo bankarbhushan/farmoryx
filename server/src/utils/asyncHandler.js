@@ -1,11 +1,13 @@
-// this is the program that will be the function of req ,res
-
+ // this is the program that will be the function of req ,res
 const asyncHandler = (requestHandler) => {
   (req,res,next) =>{
     Promise.resolve(requestHandler(req,res,next))
     .catch((err)=>next(err))
   }
 }
+
+export {asyncHandler}
+
 //here we pass the data and return the function 
 
 
@@ -22,5 +24,3 @@ const asyncHandler = (requestHandler) => {
 //     });
 //   }
 // };
-
-// export {asyncHandler}

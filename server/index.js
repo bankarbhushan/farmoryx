@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import connectDB from "./src/config/db.js";
+import connectDB from "./src/db/index.js";
 import adminRouters from "./src/routes/admin.route.js";
 import brokerRouter from "./src/routes/broker.route.js";
 import farmerRouter from "./src/routes/farmer.route.js";
