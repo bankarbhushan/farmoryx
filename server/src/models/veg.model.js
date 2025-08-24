@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose ,{Schema} from "mongoose";
 
-const vegSchema = new mongoose.Schema(
+const vegSchema = new Schema(
   {
     nameEnglish: {
       type: String,
@@ -23,4 +23,4 @@ const vegSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Veg", vegSchema);
+export const Veg = mongoose.model("Veg", vegSchema);

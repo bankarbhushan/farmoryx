@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose,{Schema} from "mongoose";
 import validator from "validator";
 
-const farmerSchema = new mongoose.Schema(
+const farmerSchema = new Schema(
   {
     name: {
       type: String,
@@ -49,5 +49,5 @@ const farmerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Farmer = mongoose.model("Farmer", farmerSchema);
-export default Farmer;
+export const Farmer = mongoose.model("Farmer", farmerSchema);
+

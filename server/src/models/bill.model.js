@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose,{Schema} from "mongoose";
 
 // Define item schema used in bills
-const productItemSchema = new mongoose.Schema({
+const productItemSchema = new Schema({
   name: String,
   rate: Number,
   weight: Number,
@@ -49,4 +49,4 @@ const billSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Bill", billSchema);
+export const Bill =  mongoose.model("Bill", billSchema);

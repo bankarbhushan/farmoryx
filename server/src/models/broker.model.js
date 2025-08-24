@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose ,{Schema} from "mongoose";
 import validator from "validator";
 
-const brokerSchema = new mongoose.Schema(
+const brokerSchema = new Schema(
   {
     name: {
       type: String,
@@ -104,5 +104,5 @@ const brokerSchema = new mongoose.Schema(
   { timestamps: true } // this will give you created at and updated at.
 );
 
-const Broker = mongoose.model("Broker", brokerSchema);
-export default Broker;
+export const Broker = mongoose.model("Broker", brokerSchema);
+

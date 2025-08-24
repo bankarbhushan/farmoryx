@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose,{Schema} from "mongoose";
 
-const itemSchema = new mongoose.Schema(
+const itemSchema = new Schema(
   {
     name: {
       type: mongoose.Schema.Types.String,
@@ -26,4 +26,4 @@ const itemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Item", itemSchema);
+export const Item=  mongoose.model("Item", itemSchema);

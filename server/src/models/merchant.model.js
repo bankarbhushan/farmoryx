@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose ,{Schema} from "mongoose";
 import validator from "validator";
 
-const merchantSchema = new mongoose.Schema(
+const merchantSchema = new Schema(
   {
     // brokerId: {
     //   type: mongoose.Schema.Types.ObjectId,
@@ -53,4 +53,4 @@ const merchantSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Merchant", merchantSchema);
+export const Merchant=  mongoose.model("Merchant", merchantSchema);
