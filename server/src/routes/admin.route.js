@@ -1,16 +1,38 @@
+// import express from "express";
+// import {
+//   createAdmin,
+//   deleteAdmin,
+//   getAllAdmin,
+//   updateAdmin,
+// } from "../controllers/admin.controller.js";
+
+// const adminRouter = express.Router();
+
+// router.post("/regitration", createAdmin);
+// // router.get("/adminfeed", getAllAdmin);
+// // router.delete("/deleteadmin/:id", deleteAdmin);
+// // router.patch("/updateadmin/:id", updateAdmin);
+
+// export {adminRouter};
+
+
+// import { Router } from "express";
+// import { registerAdmin } from "../controllers/admin.controller.js";
+// const router = Router()
+
+// router.route("/register").post(registerAdmin);
+
+// export default router;
+
 import express from "express";
-import {
-  createAdmin,
-  deleteAdmin,
-  getAllAdmin,
-  updateAdmin,
-} from "../controllers/admin.controller.js";
+import { registerAdmin } from "../controllers/admin.controller.js";
+import {upload} from "../middlewares/multer.middleware.js"
 
 const router = express.Router();
 
-router.post("/reg", createAdmin);
-router.get("/adminfeed", getAllAdmin);
-router.delete("/deleteadmin/:id", deleteAdmin);
-router.patch("/updateadmin/:id", updateAdmin);
+// POST => /api/v1/admin/register
+router.route("/register").post(upload.single({name:"avatar"}),registerAdmin)
 
-export default router;
+export { router as adminRouter };
+
+

@@ -7,3 +7,4 @@ class ApiResponse {
         //all the status code 300 to 400 becouse we were passing the success message.
     }
 }
+export{ApiResponse}
