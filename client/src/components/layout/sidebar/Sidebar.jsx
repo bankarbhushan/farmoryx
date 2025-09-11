@@ -1,0 +1,19 @@
+import React from "react";
+
+const Sidebar = ({ setActiveComponent }) => {
+  return (
+    <nav>
+      <h2 className="text-xl mb-4 font-semibold">Menu</h2>
+      <ul>
+        <li
+          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+          onClick={() => setActiveComponent("Dashboard")}
+        >
+          Dashboard
+        </li>
+      </ul>
+    </nav>
+  );
+};
+
+export default Sidebar;
