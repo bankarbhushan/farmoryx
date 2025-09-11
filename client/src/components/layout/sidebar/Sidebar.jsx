@@ -17,6 +17,12 @@ const Sidebar = ({ setActiveComponent }) => {
         >
           Veg List
         </li>
+           <li
+          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+          onClick={() => setActiveComponent("FarmerList")}
+        >
+          Farmer List
+        </li>
       </ul>
     </nav>
   );
