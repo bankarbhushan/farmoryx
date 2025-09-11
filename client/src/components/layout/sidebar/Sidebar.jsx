@@ -23,6 +23,10 @@ const Sidebar = ({ setActiveComponent }) => {
         >
           Farmer List
         </li>
+        <li className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+            onClick={() => setActiveComponent("MerchantList")}>
+              Merchant List
+        </li>
       </ul>
     </nav>
   );
