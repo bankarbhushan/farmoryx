@@ -11,6 +11,12 @@ const Sidebar = ({ setActiveComponent }) => {
         >
           Dashboard
         </li>
+        <li
+          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+          onClick={() => setActiveComponent("VegList")}
+        >
+          Veg List
+        </li>
       </ul>
     </nav>
   );
