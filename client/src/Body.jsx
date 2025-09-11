@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./components/layout/sidebar/Sidebar";
 import Dashboard from "./components/dashboard/Dashboard";
 import Veglist from "./components/veglist/Veglist";
+import FarmerList from "./components/farmerlist/Farmerlist";
 
 const Body = () => {
   const [activeComponent, setActiveComponent] = useState("Dashboard");
@@ -11,7 +12,9 @@ const Body = () => {
       case "Dashboard":
         return <Dashboard />;
       case "VegList":
-        return <Veglist/>
+        return <Veglist/>;
+      case "FarmerList":
+        return <FarmerList/>
       default:
         return <Dashboard />;
     }
