@@ -1,30 +1,16 @@
-import { useState } from "react";
-import "./App.css";
-import { useEffect } from "react";
-
-import axios from "axios";
+import Header from "./components/layout/header/Header";
+import Body from "./Body";
+import Footer from "./components/layout/footer/Footer";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  const [data, setData] = useState("");
-
-  useEffect(() => {
-    try {
-      const data = axios.get("/api/data").then((res) => setData(res.data));
-    } catch (error) {
-      console.log("error:" + error.message);
-    }
-  }, []);
-
   return (
-    <>
-      <h1>wel come from farmoryX</h1>
-
-      <hr />
-
-      <h4>{data}</h4>
-    </>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <div className="flex flex-1 pt-14">
+        <Body />
+      </div>
+      <Footer />
+    </div>
   );
 }
 
