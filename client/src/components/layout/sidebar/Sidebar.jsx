@@ -7,9 +7,31 @@ const Sidebar = ({ setActiveComponent }) => {
       <ul>
         <li
           className="cursor-pointer hover:bg-gray-700 p-2 rounded"
-          onClick={() => setActiveComponent("Dashboard")}
+          onClick={() => setActiveComponent("Dashbord")}
         >
           Dashboard
+        </li>
+        <li
+          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+          onClick={() => setActiveComponent("Bill")}
+        >
+          Bill
+        </li>
+        <li
+          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+          onClick={() => setActiveComponent("VegList")}
+        >
+          Veg List
+        </li>
+           <li
+          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+          onClick={() => setActiveComponent("FarmerList")}
+        >
+          Farmer List
+        </li>
+        <li className="cursor-pointer hover:bg-gray-700 p-2 rounded"
+            onClick={() => setActiveComponent("MerchantList")}>
+              Merchant List
         </li>
       </ul>
     </nav>
