@@ -2,7 +2,7 @@ import React from 'react'
 import Wrapper from '../constants/Wrapper'
 import InfoForm from "./components/InfoForm"
 import VegForm from './components/VegForm'
-import Bill from './components/BillForm'
+import BillForm from './components/BillForm'
 import ActionButtons from './components/ActionButtons'
 
 const Bill = () => {
@@ -17,7 +17,7 @@ const Bill = () => {
                     <VegForm/>
                 </Wrapper>
             </div>
-            <Bill/>
+            <BillForm/>
             <ActionButtons/>
         </div>
     </Wrapper>
