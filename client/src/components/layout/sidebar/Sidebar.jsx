@@ -1,38 +1,15 @@
 import React from "react";
+import MenuItem from "./MenuItem";
 
-const Sidebar = ({ setActiveComponent }) => {
+const Sidebar = ({ activeComponent, setActiveComponent }) => {
   return (
     <nav>
-      <h2 className="text-xl mb-4 font-semibold">Menu</h2>
       <ul>
-        <li
-          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
-          onClick={() => setActiveComponent("Dashbord")}
-        >
-          Dashboard
-        </li>
-        <li
-          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
-          onClick={() => setActiveComponent("Bill")}
-        >
-          Bill
-        </li>
-        <li
-          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
-          onClick={() => setActiveComponent("VegList")}
-        >
-          Veg List
-        </li>
-           <li
-          className="cursor-pointer hover:bg-gray-700 p-2 rounded"
-          onClick={() => setActiveComponent("FarmerList")}
-        >
-          Farmer List
-        </li>
-        <li className="cursor-pointer hover:bg-gray-700 p-2 rounded"
-            onClick={() => setActiveComponent("MerchantList")}>
-              Merchant List
-        </li>
+        <MenuItem label="Dashboard" value="Dashboard" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+        <MenuItem label="Bill" value="Bill" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+        <MenuItem label="Veg List" value="VegList" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+        <MenuItem label="Farmer List" value="FarmerList" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+        <MenuItem label="Merchant List" value="MerchantList" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
       </ul>
     </nav>
   );

@@ -16,11 +16,11 @@ const Body = () => {
       case "Bill":
         return <Bill />;
       case "VegList":
-        return <Veglist/>;
+        return <Veglist />;
       case "FarmerList":
-        return <FarmerList/>;
+        return <FarmerList />;
       case "MerchantList":
-        return <MerchantList/>
+        return <MerchantList />;
       default:
         return <Dashboard />;
     }
@@ -29,7 +29,7 @@ const Body = () => {
   return (
     <div className="flex w-full">
       <div className="w-64 bg-gray-800 text-white p-4 hidden md:block">
-        <Sidebar setActiveComponent={setActiveComponent} />
+        <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
       </div>
 
       <div className="flex-1 bg-gray-100 p-6">{renderComponent()}</div>

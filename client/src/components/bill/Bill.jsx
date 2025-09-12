@@ -9,7 +9,8 @@ const Bill = () => {
   return (
     <Wrapper>
         <div>
-            <div className='flex flex-col justify-betweens md:flex-row'>
+        <h1 className="text-xl font-bold text-center mb-4 text-gray-800">Bill </h1>            
+        <div className='flex flex-col justify-betweens md:flex-row'>
                 <Wrapper className='min-h-57 min-w-[38%] shadow-none'>
                      <InfoForm/>
                  </Wrapper>
