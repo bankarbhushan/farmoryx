@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import { app } from "./app.js";
 import connectDB from "./src/db/index.js";
 
-dotenv.config();
+dotenv.config({
+  path:"./.env"
+});
 
 // const app = express();
 app.use(express.json());

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import {ApiError} from "../utils/ApiError.js"
+import { ApiError } from "../utils/ApiError.js"
 import { Admin } from "../models/admin.model.js";
-import {uploadOnCloudinary} from "../utils/couldinary.js"
+import { uploadOnCloudinary } from "../utils/couldinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 // import {Admin} from "../models/admin.model.js";
 
@@ -106,42 +106,51 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-const registerAdmin = asyncHandler(async(req,res)=>{
-  const {name,email,password} = req.body;
+const registerAdmin = asyncHandler(async (req, res) => {
+  const { name, email, password, mobile } = req.body;
 
-  if([name,email,password].some((fields)=> fields?.trim() ==="")){
-    throw new ApiError(400,"All fields are required.")
+  if ([name, email, password].some((fields) => fields?.trim() === "")) {
+    throw new ApiError(400, "All fields are required.")
   }
   // for every input we will check the empty value if exist then 
   // it will give true then we show the error
 
-  if(Admin.findOne({email})) throw new ApiError(409,"This email Alredy Exits")
+  const existingAdmin = await Admin.findOne({ email })
+  if (existingAdmin) throw new ApiError(409, "This email Alredy Exits")
 
- const avaterLocalpath = req.file?.avatar[0]?.path;
-
- if(!avaterLocalpath) throw new ApiError(400,"please upaload Photo.")
-
-  //uploadin the image to local storage.
-  // we are passing the local path of the file.
- const avatar = await uploadOnCloudinary(avaterLocalpath);
-
- if(!avatar) throw new ApiError(400,"Avatar File required.")
 
   const admin = await Admin.create({
-    name:name.toLowerCase(),
+    name: name.toLowerCase(),
     email,
     password,
-    avatar: avatar.url
+    mobile
   })
 
   const createdAdmin = await Admin.findById(admin._id).select("-password -refreashToken");
 
-  if(!createdAdmin) throw new ApiError(500,"Something wents wrong while creating Admin")
+  if (!createdAdmin) throw new ApiError(500, "Something wents wrong while creating Admin")
 
-  return res.ApiResponse(status(201),json(
-    new ApiResponse(200,createdAdmin,"Admin Created Succesfully.")
-  ))
+  return res
+    .status(201)
+    .json(new ApiResponse(201, createdAdmin, "Admin Created Successfully."));
+
   // first show the api response when save then it will show the 200 
 })
 
-export {registerAdmin}  
+const loginAdmin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if ([email, password].some((fields) => fields?.trim() === "")) {
+    throw new ApiError(400, "All fields are required.");
+  }
+  const notExistAdmin = await Admin.findOne({ email })
+
+  if (notExistAdmin) throw new ApiError(400, "All fields are required.");
+
+
+
+
+
+})
+
+export { registerAdmin }  

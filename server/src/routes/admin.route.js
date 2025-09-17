@@ -26,12 +26,22 @@
 
 import express from "express";
 import { registerAdmin } from "../controllers/admin.controller.js";
-import {upload} from "../middlewares/multer.middleware.js"
+import { upload } from "../middlewares/multer.middleware.js"
 
 const router = express.Router();
 
 // POST => /api/v1/admin/register
-router.route("/register").post(upload.single({name:"avatar"}),registerAdmin)
+// router.route("/register").post(upload.single({name:"avatar"}),registerAdmin)
+// router.route("/register").post(upload.single("avatar"), registerAdmin);
+// router.route("/register").post(upload.array("avatars", 5), registerAdmin);
+
+router.route("/register").post(
+  upload.fields([
+    { name: "avatar", maxCount: 1 },
+    { name: "documents", maxCount: 5 }
+  ]),
+  registerAdmin
+);
 
 export { router as adminRouter };
 
