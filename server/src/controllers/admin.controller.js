@@ -106,6 +106,24 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 import { asyncHandler } from "../utils/asyncHandler.js";
 
+const generateAccessTokenAndRefreshToken = async (userId) => {
+  try {
+    const user = await Admin.findById(userId)
+    const accessToken = user.generateAccessToken(user);
+    const refreshToken = user.generateRefreashToken(user);
+
+    // saving the token in the database 
+    user.refreashToken = refreshToken;
+
+    // no need to check the password valid just save the user.
+    await user.save({ validateBeforeSave: false });
+
+    return { accessToken, refreshToken }
+  } catch (error) {
+    throw new ApiError(500, "Unable to generate the access and refresh token.")
+  }
+}
+
 const registerAdmin = asyncHandler(async (req, res) => {
   const { name, email, password, mobile } = req.body;
 
@@ -138,17 +156,22 @@ const registerAdmin = asyncHandler(async (req, res) => {
 })
 
 const loginAdmin = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, mobile, password } = req.body;
 
-  if ([email, password].some((fields) => fields?.trim() === "")) {
-    throw new ApiError(400, "All fields are required.");
-  }
-  const notExistAdmin = await Admin.findOne({ email })
+  if (!email || !mobile) throw new ApiError(400, "All fields are required")
 
-  if (notExistAdmin) throw new ApiError(400, "All fields are required.");
+  const user = await Admin.findOne({ $or: [{ email }, { mobile }] });
 
+  if (!user) throw new ApiError(401, "User does not exit.");
 
+  const validatePassword = isPasswordCorrect(password);
+  if (!validatePassword) throw new ApiError(401, "Invalid credential");
 
+  // using this we will get the user refresh token and acces token.
+  const { refreshToken, accessToken } = await generateAccessTokenAndRefreshToken(user._id)
+
+  // using select method we can define what we dont need to send to the user
+  const loggedInUder = Admin.findById(user._id).select("-password", "-refreshToken");
 
 
 })
