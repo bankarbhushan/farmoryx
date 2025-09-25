@@ -1,4 +1,4 @@
-import mongoose,{Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import validator from "validator";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
@@ -12,7 +12,7 @@ const adminSchema = new Schema(
       lowercase: true,
       minLength: [2, "Name should be greater than 2 characters."],
       maxLength: [100, "You reached the name limit."],
-      index:true // this is allow tot the search im the Database.
+      index: true // this is allow tot the search im the Database.
     },
     email: {
       type: String,
@@ -36,12 +36,17 @@ const adminSchema = new Schema(
         message:
           "Password must be at least 8 characters, include upper & lowercase letters, a number, and a special character, space not allowed",
       },
-   
     },
-   avatar :{
-        type:String,
-        required:true
-      },
+    mobile: {
+      type: Number,
+      required: true
+    },
+    avatar:
+    {
+      type: String,
+      //  required: true 
+    },
+    documents: [{ type: String }],
     role: {
       type: String,
       enum: ["admin"],
@@ -55,41 +60,44 @@ const adminSchema = new Schema(
     lastLoginAt: {
       type: Date,
     },
+    refreashToken: {
+      type: String
+    }
   },
   { timestamps: true }
 );
 
-adminSchema.pre("save",async function(next){
-  if(this.isModified("password")){
-  this.password = bcrypt.hash(this.password,10);
-  next()
+adminSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+    next()
   }
   // when only password change then only run
 })
 
-adminSchema.methods.isPasswordCorrect = async function(password){
-  return await bcrypt.compare(password,this.password)
+adminSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password)
 }
 
-adminSchema.methods.generateAccessToken = function(){
+adminSchema.methods.generateAccessToken = function () {
   jwt.sign({
-    _id:this._id,
-    name:this.name,
-    email:this.email
+    _id: this._id,
+    name: this.name,
+    email: this.email
   },
-  process.env.ACCESS_TOKEN_SECRET,
-  {
-    expriresIn:process.env.ACCESS_TOKEN_EXPIRY
-  })
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expriresIn: process.env.ACCESS_TOKEN_EXPIRY
+    })
 }
 
-adminSchema.methods.generateRefreashToken = function(){
+adminSchema.methods.generateRefreashToken = function () {
   jwt.sign({
-    _id:this._id,
+    _id: this._id,
   },
-  process.env.REFREASH_TOKEN_SECRET,
-  {
-    expriresIn:process.env.REFREASH_TOKEN_EXPIRY
-  })
+    process.env.REFREASH_TOKEN_SECRET,
+    {
+      expriresIn: process.env.REFREASH_TOKEN_EXPIRY
+    })
 }
-export const Admin =  mongoose.model("Admin", adminSchema);
+export const Admin = mongoose.model("Admin", adminSchema);
