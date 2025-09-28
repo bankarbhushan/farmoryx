@@ -1,15 +1,17 @@
 import Header from "./components/layout/header/Header";
 import Body from "./Body";
 import Footer from "./components/layout/footer/Footer";
+import Login from "./components/auth/login/Login";
 
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      {/* <Header />
       <div className="flex flex-1 pt-14">
         <Body />
       </div>
-      <Footer />
+      <Footer /> */}
+      <Login/>
     </div>
   );
 }

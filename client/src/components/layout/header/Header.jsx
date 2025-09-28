@@ -4,6 +4,7 @@ import { GiFarmTractor } from "react-icons/gi";
   
 
 const Header = () => {
+
   return (
     <header className="fixed top-0 left-0 right-0 h-14 bg-green-800 text-white flex items-center justify-between px-6 shadow-md z-50">
       <GiFarmTractor className="text-4xl cursor-pointer" />
