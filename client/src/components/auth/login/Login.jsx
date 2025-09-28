@@ -8,14 +8,11 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left Side - Form */}
       <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-6 bg-green-50">
         <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
           <h2 className="text-3xl font-bold text-green-700 text-center mb-8">
             FarmoryX Login
           </h2>
-
-          {/* Role Select */}
           <div className="mb-5">
             <label className="block text-gray-700 font-medium mb-2">
               Role
@@ -30,8 +27,6 @@ const Login = () => {
               <option value="farmer">Farmer</option>
             </select>
           </div>
-
-          {/* Email */}
           <div className="mb-5">
             <label className="block text-gray-700 font-medium mb-2">
               Email
@@ -42,8 +37,6 @@ const Login = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
-
-          {/* Password */}
           <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-2">
               Password
@@ -67,8 +60,6 @@ const Login = () => {
               </button>
             </div>
           </div>
-
-          {/* Login Button */}
           <button
             type="button"
             className="w-full py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-200"
@@ -77,8 +68,6 @@ const Login = () => {
           </button>
         </div>
       </div>
-
-      {/* Right Side - Illustration */}
       <div className="hidden md:flex w-1/2 items-center justify-center bg-green-50">
         <LoginImage />
       </div>

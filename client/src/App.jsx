@@ -2,6 +2,7 @@ import Header from "./components/layout/header/Header";
 import Body from "./Body";
 import Footer from "./components/layout/footer/Footer";
 import Login from "./components/auth/login/Login";
+import Register from "./components/auth/login/Register";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
         <Body />
       </div>
       <Footer /> */}
-      <Login/>
+      {/* <Login/> */}
+      <Register/>
     </div>
   );
 }
