@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { Admin } from "../models/admin.model.js";
 import { uploadOnCloudinary } from "../utils/couldinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
+
 // import {Admin} from "../models/admin.model.js";
 
 // export const createAdmin = async (req, res) => {
@@ -173,7 +174,23 @@ const loginAdmin = asyncHandler(async (req, res) => {
   // using select method we can define what we dont need to send to the user
   const loggedInUder = Admin.findById(user._id).select("-password", "-refreshToken");
 
+  // this will not allow to edit the RT and AC token from the frontend.
+  const options = {
+    httpOnly:true,
+    secure:true
+  }
 
+  // sending the response admin logged in successfully.
+  return res
+  .status(200)
+  .cookie("accessToken",accessToken,options)
+  .cookie("refreshToken",refreshToken,options)
+  .json(
+    new ApiResponse(200,{
+      user:loggedInUder,accessToken,refreshToken,
+      message:"Admin Logged in successfully."
+    })
+  );
 })
 
-export { registerAdmin }  
+export { registerAdmin,loginAdmin }  
