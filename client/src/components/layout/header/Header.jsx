@@ -1,6 +1,7 @@
 // Header.jsx
 import React from "react";
 import { GiFarmTractor } from "react-icons/gi";
+import { Link } from "react-router";
   
 
 const Header = () => {
@@ -10,9 +11,7 @@ const Header = () => {
       <GiFarmTractor className="text-4xl cursor-pointer" />
 
       <div className="text-xl font-bold">FarmoryX</div>
-      <button className="px-4 py-2 bg-yellow-700 text-white rounded-md hover:bg-yellow-600 transition">
-        Login
-      </button>
+      <Link className="px-4 py-2 bg-yellow-700 text-white rounded-md hover:bg-yellow-600 transition" to={"/"}>Login</Link>
     </header>
   );
 };

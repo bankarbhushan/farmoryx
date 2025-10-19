@@ -1,12 +1,12 @@
 import React from 'react'
-import LoginSvg from "../../assets/Farmers market-bro.svg"
+import Reg_Svg from "../../assets/fruit shop-amico.svg"
 
 
-const LoginImage = () => {
+const Register_Image = () => {
   return (
    <div className="md:flex m-auto w-[65%] bg-green-50 justify-center items-center">
         <img
-          src={LoginSvg}
+          src={Reg_Svg}
           alt="Farm Illustration"
           className="max-w-lg"
         />
@@ -14,4 +14,4 @@ const LoginImage = () => {
   )
 }
 
-export default LoginImage
+export default Register_Image
