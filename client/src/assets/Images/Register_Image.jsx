@@ -4,7 +4,7 @@ import Reg_Svg from "../../assets/fruit shop-amico.svg"
 
 const Register_Image = () => {
   return (
-   <div className="hidden md:flex w-full bg-green-50 justify-center items-center">
+   <div className="md:flex m-auto w-[65%] bg-green-50 justify-center items-center">
         <img
           src={Reg_Svg}
           alt="Farm Illustration"

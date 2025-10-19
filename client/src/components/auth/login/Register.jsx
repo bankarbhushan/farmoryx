@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { LuEye } from "react-icons/lu";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import Register_Image from "../../../assets/Images/Register_Image" 
+import { Link } from "react-router-dom";
 
 const Register = () =>{
   const [role, setRole] = useState("");
@@ -57,10 +58,6 @@ const Register = () =>{
             <Input label="Name" type="text" placeholder="Enter farmer name" />
             <Input label="Phone" type="tel" placeholder="Enter mobile number" />
             <Input label="Village" type="text" placeholder="Village" />
-            <Input label="Taluka" type="text" placeholder="Taluka" />
-            <Input label="District" type="text" placeholder="District" />
-            <Input label="State" type="text" placeholder="State" />
-            <Input label="Pincode" type="text" placeholder="Pincode" />
           </>
         );
       case "merchant":
@@ -85,7 +82,7 @@ const Register = () =>{
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col-reverse md:flex-row min-w-full">
       <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-6 bg-green-50">
         <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8">
           <h2 className="text-3xl font-bold text-green-700 text-center mb-8">
@@ -109,15 +106,17 @@ const Register = () =>{
           </div>
           <form className="space-y-5">{renderFields()}</form>
 
-          <button
-            type="submit"
-            className="w-full mt-6 py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition"
-          >
-            Register
-          </button>
+          <Link to={"/"}>
+            <button
+                type="submit"
+                className="mt-6 py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition"
+              >
+              Register
+            </button>
+          </Link>
         </div>
       </div>
-      <div className="hidden   pt-6 md:flex w-1/2 items-start justify-center bg-green-50">
+      <div className="pt-6 md:flex md:w-1/2 items-center md:items-start justify-center bg-green-50">
         <Register_Image />
       </div>
     </div>
