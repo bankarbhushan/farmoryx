@@ -90,7 +90,7 @@ const Dashboard = () => {
           title="Profit / Loss"
           value="+20%"
           icon={<FaChartLine />}
-          className="text-blue-400 aspect-square w-72 flex flex-col justify-center items-center"
+          className="text-blue-400 aspect-square w-44 flex flex-col justify-center items-center"
         />
       </div>
     </Wrapper>
