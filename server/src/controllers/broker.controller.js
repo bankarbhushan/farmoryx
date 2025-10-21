@@ -1,6 +1,8 @@
 // import mongoose from "mongoose";
 // import brokerModel from "../models/broker.model.js";
 
+import { asyncHandler } from "../utils/asyncHandler";
+
 // export const createBroker = async (req, res) => {
 //   try {
 //     const { name, email, password, phone, businessName, address } = req.body;
@@ -101,3 +103,7 @@
 //     res.status(500).json({ message: "Server error", error: error.message });
 //   }
 // };
+
+const registerBroker = asyncHandler(async (req,res)=>{
+    const {role, name, email,address,}
+})

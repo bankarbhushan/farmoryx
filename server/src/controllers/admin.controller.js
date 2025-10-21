@@ -126,9 +126,9 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
 }
 
 const registerAdmin = asyncHandler(async (req, res) => {
-  const { name, email, password, mobile } = req.body;
+  const { name, email, password, mobile,role } = req.body.admin;
 
-  if ([name, email, password].some((fields) => fields?.trim() === "")) {
+  if ([name, email, password,role,mobile].some((fields) => fields?.trim() === "")) {
     throw new ApiError(400, "All fields are required.")
   }
   // for every input we will check the empty value if exist then 
@@ -139,10 +139,11 @@ const registerAdmin = asyncHandler(async (req, res) => {
 
 
   const admin = await Admin.create({
-    name: name.toLowerCase(),
+    name: name,
     email,
     password,
-    mobile
+    mobile,
+    role
   })
 
   const createdAdmin = await Admin.findById(admin._id).select("-password -refreashToken");
