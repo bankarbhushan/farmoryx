@@ -41,10 +41,10 @@
 //       enum: ["pending", "paid"],
 //       default: "pending",
 //     },
-    billNumber: { type: String, unique: true },
-    isBillGenerated: { type: Boolean, default: false },
-    pdfUrl: String,
-    isSharedToWhatsApp: { type: Boolean, default: false },
+    // billNumber: { type: String, unique: true },
+    // isBillGenerated: { type: Boolean, default: false },
+    // pdfUrl: String,
+    // isSharedToWhatsApp: { type: Boolean, default: false },
 //   },
 //   { timestamps: true }
 // );
