@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Wrapper from "../constants/Wrapper";
 import Loader from "../constants/Loader";
+import Vegmodal from "./Vegmodal";
 
 
 const Veglist = () => {
-  const vegetables = [
-  { id: 1, marathiName: "वांगे", hinglishName: "Vangi", englishName: "Brinjal" },
+  const [vegitables,setVegitables]=useState([
+     { id: 1, marathiName: "वांगे", hinglishName: "Vangi", englishName: "Brinjal" },
   { id: 2, marathiName: "टोमॅटो", hinglishName: "Tamatar", englishName: "Tomato" },
   { id: 3, marathiName: "बटाटा", hinglishName: "Batata", englishName: "Potato" },
   { id: 4, marathiName: "कांदा", hinglishName: "Kanda", englishName: "Onion" },
@@ -25,9 +26,13 @@ const Veglist = () => {
   { id: 18, marathiName: "मेथी", hinglishName: "Methi", englishName: "Fenugreek" },
   { id: 19, marathiName: "मुळा", hinglishName: "Mula", englishName: "Radish" },
   { id: 20, marathiName: "काकडी", hinglishName: "Kakdi", englishName: "Cucumber" },
-];
 
+  ])
+
+  const [newVegitables,setNewVegitables]=useState({id:" ",marathiName:" ",hinglishName:" ",englishName:" " })
   const [isLoading, setIsLoading] = useState(true);
+
+  const [showForm,setShowForm]=useState(false);
 
   // Example: simulate loading
   useEffect(() => {
@@ -35,16 +40,51 @@ const Veglist = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleAddVegitable=()=>{
+       
+    const {id,marathiName,hinglishName,englishName}=newVegitables;
+    if(id.trim() && marathiName.trim() && hinglishName.trim() && englishName.trim()){
+        console.log("Added:", newVegitables);
+      setVegitables([...vegitables,{id:id.trim(),marathiName:marathiName.trim(),hinglishName:hinglishName.trim(),englishName:englishName.trim()}])
+      setNewVegitables({});
+      setShowForm(false)
+      closeModal();
+    }
+  
+  }
+
+  const openModal=()=>{
+       setShowForm(true);
+       document.getElementById("my_modal_4").showModal();
+  }
+
+  const closeModal=()=>{
+    setShowForm(false);
+    document.getElementById("my_modal_4")
+  }
+
   return (
     <div>
       {isLoading ? (
             <Loader/>
       ) : (
         <Wrapper>
+          <div className="flex justify-between item-center mb-4">
           <h1 className="text-xl font-bold text-center mb-4 text-gray-800">
             🥦 Veg List
           </h1>
-
+          <button
+          onClick={openModal}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+          >AddNewVegitables</button>
+          </div>
+          <Vegmodal
+          showForm={showForm}
+          setShowForm={setShowForm}
+          newVegitables={newVegitables}
+          setNewVegitables={setNewVegitables}
+          handleAddVegitable={handleAddVegitable}
+          />
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden">
               <thead className="bg-green-600 text-white">
@@ -59,7 +99,7 @@ const Veglist = () => {
 
               <tbody className="divide-y divide-gray-200">
                 {
-                  vegetables && vegetables.map((veg,id)=>
+                  vegitables && vegitables.map((veg,id)=>
                   <tr className="hover:bg-gray-50" key={id}>
                    <td className="px-4 py-2">{veg.id}</td>
                    <td className="px-4 py-2">{veg.marathiName}</td>
