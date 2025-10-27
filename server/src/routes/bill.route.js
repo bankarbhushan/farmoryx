@@ -14,3 +14,12 @@
 // router.patch("/updateproduct/:id", updateBill);
 
 // export default router;
+
+import express from "express"
+import { createBill } from "../controllers/bill.controller.js";
+
+const router = express.Router();
+
+router.route("/createbill").post(createBill)
+
+export  {router as billRouter};

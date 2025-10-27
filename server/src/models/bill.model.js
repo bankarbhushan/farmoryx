@@ -41,12 +41,75 @@
 //       enum: ["pending", "paid"],
 //       default: "pending",
 //     },
-//     billNumber: { type: String, unique: true },
-//     isBillGenerated: { type: Boolean, default: false },
-//     pdfUrl: String,
-//     isSharedToWhatsApp: { type: Boolean, default: false },
+    // billNumber: { type: String, unique: true },
+    // isBillGenerated: { type: Boolean, default: false },
+    // pdfUrl: String,
+    // isSharedToWhatsApp: { type: Boolean, default: false },
 //   },
 //   { timestamps: true }
 // );
 
 // export const Bill =  mongoose.model("Bill", billSchema);
+
+
+import mongoose , {Schema} from "mongoose"
+
+const productItemSchema = new Schema({
+    name:String,
+    rate:Number,
+    weight:Number,
+    productItemTotal:Number
+})
+
+const billSchema = new Schema({
+    farmerId :{
+        type:mongoose.Schema.Types.String,
+        ref:"Farmer",
+        required:["Farmer Id is required."]
+    },
+    brokerId:{
+        type:mongoose.Schema.Types.String,
+        ref:"Broker",
+        required:[true,"Broker id is required."]
+    },
+    Date:{
+        type :Date,
+        required:[true,"Date is required."]
+    },
+    items:[productItemSchema],
+    subtotal: { 
+        type: Number, 
+        required: true 
+    },
+    commissionAmount: Number,
+    pattiCharges: {
+         type: Number, 
+         default: 10 
+    },
+    advancePaid: { 
+        type: Number, 
+        default: 0 
+    },
+    externalVegCost: { 
+        type: Number, 
+        default: 0 
+    },
+    netTotal: Number,
+    billNumber: { 
+        type: Number, 
+        unique: true 
+    },
+    isBillGenerated: { 
+        type: Boolean,
+        default: false 
+    },
+    pdfUrl: String,
+    isSharedToWhatsApp: { 
+        type: Boolean, 
+        default: false 
+    },
+},{
+    timestamps:true
+})
+
+export const Bill = mongoose.model("Bill",billSchema)

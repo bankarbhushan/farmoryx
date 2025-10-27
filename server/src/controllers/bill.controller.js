@@ -125,3 +125,68 @@
 //     res.status(500).json({ message: "Server error", error: error.message });
 //   }
 // };
+
+import { Bill } from "../models/bill.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+
+const createBill = asyncHandler(async (req, res) => {
+  const {
+    farmerId,
+    brokerId,
+    Date,
+    items,
+    subtotal,
+    commissionAmount,
+    pattiCharges,
+    advancePaid,
+    externalVegCost,
+    billNumber,
+    netTotal
+  } = req.body;
+
+  if (
+    [
+      farmerId,
+      brokerId,
+      Date,
+      items,
+      subtotal,
+      commissionAmount,
+      pattiCharges,
+      advancePaid,
+      externalVegCost,
+      billNumber,
+      netTotal
+    ].some(field => field === undefined || field === null || field === "")
+  ) {
+    throw new ApiError(400, "All fields are required.");
+  }
+
+  const existingBill = await Bill.findOne({ billNumber });
+  if (existingBill) throw new ApiError(409, "This bill already exists.");
+
+  const bill = await Bill.create({
+    farmerId,
+    brokerId,
+    Date,
+    items,
+    subtotal,
+    commissionAmount,
+    pattiCharges,
+    advancePaid,
+    externalVegCost,
+    billNumber,
+    netTotal
+  });
+
+  if (!bill) throw new ApiError(500, "Something went wrong while creating the bill.");
+
+  res.status(201).json(
+    new ApiResponse(201, { bill }, "Bill Generation Successful.")
+  );
+});
+
+export { createBill };
+
