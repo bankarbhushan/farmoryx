@@ -7,7 +7,7 @@ import MerchantList from "./components/merchantlist/Merchantlist";
 import Bill from "./components/bill/Bill";
 
 const Body = () => {
-  const [activeComponent, setActiveComponent] = useState("Dashboard");
+  const [activeComponent, setActiveComponent] = useState("Bill");
 
   const renderComponent = () => {
     switch (activeComponent) {

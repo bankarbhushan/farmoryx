@@ -1,90 +1,82 @@
 import React, { useState } from 'react';
 import Wrapper from '../../constants/Wrapper';
+import { useBill } from "../context/BillContext"
 
 const VegForm = () => {
 
-  const [genaralData,setGenaralData] = useState[""] || "";
+  // we are geeting the data from the use context hook 
+  const { addProduct, products } = useBill(); 
 
+  const [formData, setFormData] = useState({
+    productName: '',
+    weight: '',
+    rate: ''
+  });
 
-  const handleSetGenData = (e) =>{
-      setGenaralData(e.target.value)
-  }
+  // set the single product data .
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+
+    if (!formData.productName || !formData.weight || !formData.rate) {
+      alert('Please fill all fields!');
+      return;
+    }
+
+    // set the produts data into the use context.
+    // set the product as and array of the object 
+    addProduct(formData);
+
+    // here we reset the product for the adding new product details
+    setFormData({ productName: '', weight: '', rate: '' });
+  };
+
   return (
-    <div className="">
-      {/* Top Section */}
-      <div className=" bg-white rounded-md shadow-sm p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-3">
-          <select
-            type="select"
-            placeholder="पट्टी"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            <option value="0">0</option>
-            <option value="0">10</option>
-            <option value="0">20</option>
-            <option value="0">30</option>
-            <option value="0">50</option>
-            <option value="0">100</option>
-            <option value="0">150</option>
-            <option value="0">200</option>
-            <option value="0">300</option>
-            <option value="0">500</option>
-            <option value="0">1000</option>
-          </select>
-          <input
-            type="text"
-            placeholder="नगदी दिलेली रक्कम"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
+    <Wrapper className="border border-green-300 mt-4 shadow-sm bg-white">
+      <h3 className="m-4 text-emerald-600 font-semibold">Add Veg</h3>
 
-        <div className="flex flex-col gap-3">
+      <form onSubmit={handleAddProduct} className="flex flex-col items-end">
+        <div className="flex gap-3 w-full">
           <input
-            value={genaralData}
-            onChange={handleSetGenData}
-            type="text"
-            placeholder="इतर शेतकऱ्यांचे घेतलेला मालाचे एकूण पैसे"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <input
-            type="text"
-            placeholder="इतर शेतकऱ्यांचे घेतलेला मालाचे एकूण पैसे"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-      </div>
-
-      {/* Bottom Section */}
-      <Wrapper className=" border border-green-300 mt-4shadow-sm  bg-white">
-        <div className='flex flex-col items-end' >
-          <div className="flex gap-3">
-          <input
+            name="productName"
+            value={formData.productName}
+            onChange={handleChange}
             type="text"
             placeholder="Enter Product Name or ID"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
+
           <input
-            type="text"
-            placeholder="weight"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            name="weight"
+            value={formData.weight}
+            onChange={handleChange}
+            type="number"
+            placeholder="Weight"
+            className="w-full input px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
+
           <input
-            type="text"
+            name="rate"
+            value={formData.rate}
+            onChange={handleChange}
+            type="number"
             placeholder="Rate/kg"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          </div>
-        
-
-          <button
-            type="button"
-            className="mt-2 w-fit px-5 py-2 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
-          >
-            Add Product
-          </button>
         </div>
-      </Wrapper>
-    </div>
+
+        <button
+          type="submit"
+          className="mt-2 w-fit px-5 py-2 cursor-pointer rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+        >
+          Add Product
+        </button>
+      </form>
+    </Wrapper>
   );
 };
 
