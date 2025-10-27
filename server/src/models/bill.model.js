@@ -67,12 +67,12 @@ const billSchema = new Schema({
         ref:"Farmer",
         required:["Farmer Id is required."]
     },
-    merchantId:{
+    brokerId:{
         type:mongoose.Schema.Types.String,
         ref:"Broker",
         required:[true,"Broker id is required."]
     },
-    supplyDate:{
+    Date:{
         type :Date,
         required:[true,"Date is required."]
     },
@@ -96,7 +96,7 @@ const billSchema = new Schema({
     },
     netTotal: Number,
     billNumber: { 
-        type: String, 
+        type: Number, 
         unique: true 
     },
     isBillGenerated: { 
