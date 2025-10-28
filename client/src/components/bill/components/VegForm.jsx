@@ -40,7 +40,7 @@ const VegForm = () => {
       <h3 className="m-4 text-emerald-600 font-semibold">Add Veg</h3>
 
       <form onSubmit={handleAddProduct} className="flex flex-col items-end">
-        <div className="flex gap-3 w-full">
+        <div className="flex flex-col md:flex-row gap-3 w-full">
           <input
             name="productName"
             value={formData.productName}
@@ -71,7 +71,7 @@ const VegForm = () => {
 
         <button
           type="submit"
-          className="mt-2 w-fit px-5 py-2 cursor-pointer rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+          className="mt-2.5 w-full md:w-fit px-5 py-2 cursor-pointer rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
         >
           Add Product
         </button>

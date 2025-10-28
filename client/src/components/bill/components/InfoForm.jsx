@@ -138,7 +138,7 @@ const onChange = (e) => {
 
         <button
           type="submit"
-          className="mt-2 w-fit px-5 py-2 cursor-pointer rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+          className="mt-2.5 w-full md:w-fit px-5 py-2 cursor-pointer rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
         >
           Add Details
         </button>
