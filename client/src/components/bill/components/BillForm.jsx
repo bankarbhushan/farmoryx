@@ -4,15 +4,17 @@ const Bill = () => {
   const { products, generalInfo ,billData} = useBill();
 
   const user = generalInfo.user;
-  console.log(user)
   const totalAmount = products.reduce((acc, p) => acc + p.weight * p.rate, 0);
   const commission = user === "farmer" ? (totalAmount * 8) / 100 : 0;
-  const totalAmount_excude_Commition = totalAmount-commission;
+  const subTotal = totalAmount - commission;
   const patti = Number(generalInfo.patti || 0);
   const advancePaid = Number(generalInfo.advancePaid || 0);
   const externalVegCost = Number(generalInfo.externalVegCost || 0);
-  const finalAmount = totalAmount - commission - patti - advancePaid - externalVegCost;
+  const totalDeductions = commission + patti + advancePaid + externalVegCost;
+  const finalAmount = totalAmount - totalDeductions;
+  
   console.log(billData)
+
 
   return (
     <div className="min-h-screen flex justify-center">
@@ -46,20 +48,28 @@ const Bill = () => {
               <th className="border px-2 py-1">वजन (kg)</th>
               <th className="border px-2 py-1">दर (₹/kg)</th>
               <th className="border px-2 py-1">(वजन * दर)</th>
+              {user === "farmer" 
+                && <th className="border px-2 py-1">कमिशन (8%)</th> 
+              }
               <th className="border px-2 py-1">एकूण</th>
             </tr>
           </thead>
           <tbody>
-            {products.map((prod, index) => (
+            {products.map((prod, index) => {
+              const oneProduct_Total = prod.weight * prod.rate;
+              const OneProductCommition = (oneProduct_Total*8)/100
+              const OneProductNetTotal = oneProduct_Total - OneProductCommition;
+              return(
               <tr key={index}>
                 <td className="border px-2 py-1">{index + 1}</td>
                 <td className="border px-2 py-1">{prod.productName}</td>
                 <td className="border px-2 py-1">{prod.weight}</td>
                 <td className="border px-2 py-1">{prod.rate}</td>
-                <td className="border px-2 py-1">{prod.weight * prod.rate}</td>
-                <td className="border px-2 py-1 font-semibold">₹{prod.weight * prod.rate}</td>
+                <td className="border px-2 py-1">₹{oneProduct_Total}</td>
+                 {user === "farmer" && <td className="border px-2 py-1">₹{OneProductCommition}</td>}
+                <td className="border px-2 py-1 font-semibold">₹{OneProductNetTotal}</td>
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
 
@@ -67,7 +77,7 @@ const Bill = () => {
         <div className="text-right mt-6 space-y-1">
           <p>एकूण (वजन * दर): <span className="font-semibold ml-4">₹{totalAmount.toFixed(0)}</span></p>
           {user === "farmer" && <p>एकूण कमिशन (8%): <span className="font-semibold ml-4">₹{commission.toFixed(0)}</span></p>}
-          <p>एकूण: <span className="font-semibold ml-4">₹{totalAmount_excude_Commition.toFixed(0)}</span></p>
+          <p>एकूण: <span className="font-semibold ml-4">₹{subTotal.toFixed(0)}</span></p>
           <p>पट्टी (-): <span className="font-semibold ml-4">₹{patti}</span></p>
           <p>नगदी दिलेली रक्कम (-): <span className="font-semibold ml-4">₹{advancePaid.toFixed(0)}</span></p>
           <p>इतर शेतकऱ्यांचे घेतलेला मालाचे एकूण पैसे (-): <span className="font-semibold ml-4 mb-2">₹{externalVegCost.toFixed(0)}</span></p>
