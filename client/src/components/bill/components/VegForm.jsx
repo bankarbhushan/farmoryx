@@ -5,7 +5,7 @@ import { useBill } from "../context/BillContext"
 const VegForm = () => {
 
   // we are geeting the data from the use context hook 
-  const { addProduct, products } = useBill(); 
+  const { addProduct } = useBill(); 
 
   const [formData, setFormData] = useState({
     productName: '',

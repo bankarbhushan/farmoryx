@@ -66,6 +66,7 @@ const onChange = (e) => {
           onChange={onChange}
           placeholder="Enter User Name"
           className="input"
+          required
         />
 
         {/* Date */}
@@ -75,6 +76,7 @@ const onChange = (e) => {
           value={formData.date}
           onChange={onChange}
           className="input"
+          required
         />
 
         {/* Mobile */}
@@ -85,6 +87,7 @@ const onChange = (e) => {
           onChange={onChange}
           placeholder="Enter mobile number"
           className="input"
+          required
         />
 
         <div className="bg-white rounded-md grid grid-cols-1 md:grid-cols-2 gap-4">
