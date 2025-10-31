@@ -2,6 +2,7 @@ import { useBill } from "../context/BillContext";
 
 const Bill = () => {
   const { products, generalInfo ,billData} = useBill();
+  
 
   const user = generalInfo.user;
   const totalAmount = products.reduce((acc, p) => acc + p.weight * p.rate, 0);
@@ -12,9 +13,6 @@ const Bill = () => {
   const externalVegCost = Number(generalInfo.externalVegCost || 0);
   const totalDeductions = commission + patti + advancePaid + externalVegCost;
   const finalAmount = totalAmount - totalDeductions;
-  
-  console.log(billData)
-
 
   return (
     <div className="min-h-screen flex justify-center">
@@ -77,6 +75,7 @@ const Bill = () => {
         <div className="text-right mt-6 space-y-1">
           <p>एकूण (वजन * दर): <span className="font-semibold ml-4">₹{totalAmount.toFixed(0)}</span></p>
           {user === "farmer" && <p>एकूण कमिशन (8%): <span className="font-semibold ml-4">₹{commission.toFixed(0)}</span></p>}
+          <hr />
           <p>एकूण: <span className="font-semibold ml-4">₹{subTotal.toFixed(0)}</span></p>
           <p>पट्टी (-): <span className="font-semibold ml-4">₹{patti}</span></p>
           <p>नगदी दिलेली रक्कम (-): <span className="font-semibold ml-4">₹{advancePaid.toFixed(0)}</span></p>
