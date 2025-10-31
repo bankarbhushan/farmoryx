@@ -153,7 +153,6 @@ const createBill = asyncHandler(async (req, res) => {
       Date,
       items,
       subtotal,
-      commissionAmount,
       pattiCharges,
       advancePaid,
       externalVegCost,
@@ -164,6 +163,12 @@ const createBill = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields are required.");
   }
 
+  const billUser = await Bill.findById({farmerId})
+
+  if(!billUser) {
+    throw new ApiError(401,"This User is not existd");
+  };
+  
   const existingBill = await Bill.findOne({ billNumber });
   if (existingBill) throw new ApiError(409, "This bill already exists.");
 
