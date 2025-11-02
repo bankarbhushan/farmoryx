@@ -14,7 +14,7 @@ const Header = () => {
         <div className="text-xl font-bold">FarmoryX</div>
       </div>
       <div className="flex gap-2.5 items-center">
-          <p>{userName}</p>
+          <p>Wel Come,{" "}{userName}</p>
         <Link className="px-4 py-2 bg-yellow-700 text-white rounded-md hover:bg-yellow-600 transition" to={"/"}>Login</Link>
       </div>
 

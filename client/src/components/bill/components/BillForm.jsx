@@ -1,9 +1,7 @@
 import { useBill } from "../context/BillContext";
 
 const Bill = () => {
-  const { products, generalInfo ,setFormData} = useBill();
-
-  
+  const { products, generalInfo ,setFormData, setEditIndex } = useBill();
 
   const user = generalInfo.user;
   const totalAmount = products.reduce((acc, p) => acc + p.weight * p.rate, 0);
@@ -14,6 +12,11 @@ const Bill = () => {
   const externalVegCost = Number(generalInfo.externalVegCost || 0);
   const totalDeductions = commission + patti + advancePaid + externalVegCost;
   const finalAmount = totalAmount - totalDeductions;
+  
+  const handleEdit = (index, product) => {
+    setFormData(product); 
+    setEditIndex(index);
+  };
 
   return (
     <div className="min-h-screen flex justify-center">
@@ -59,13 +62,16 @@ const Bill = () => {
               const OneProductCommition = (oneProduct_Total*8)/100
               const OneProductNetTotal = oneProduct_Total - OneProductCommition;
               return(
-                <tr key={index} onClick={() =>
+                <tr className="hover:bg-gray-100 cursor-pointer" key={index} onClick={() =>{
+                  handleEdit(index, prod)
                   setFormData(prev => ({
                     ...prev,
                     productName: prod.productName,
                     weight: prod.weight,
                     rate: prod.rate
                   }))
+                }
+     
                 }>
                 <td className="border px-2 py-1">{index + 1}</td>
                 <td className="border px-2 py-1">{prod.productName}</td>
@@ -73,7 +79,7 @@ const Bill = () => {
                 <td className="border px-2 py-1">{prod.rate}</td>
                 <td className="border px-2 py-1">₹{oneProduct_Total.toFixed(0)}</td>
                  {user === "farmer" && <td className="border px-2 py-1">₹{OneProductCommition}</td>}
-                <td className="border px-2 py-1 font-semibold">₹{OneProductNetTotal.toFixed(0)}</td>
+                <td className="border px-2 py-1">₹{OneProductNetTotal.toFixed(0)}</td>
               </tr>
             )})}
           </tbody>
