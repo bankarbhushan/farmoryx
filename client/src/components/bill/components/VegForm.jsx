@@ -67,8 +67,8 @@ const VegForm = () => {
   };
 
   return (
-    <Wrapper className="border border-green-300 mt-4 shadow-sm bg-white">
-      <h3 className="m-4 text-emerald-600 font-semibold">Add Veg</h3>
+    <div className="bg-white border mt-4 mb-4 border-gray-200 shadow-md rounded-xl p-6">
+      <h3 className=" mb-2 text-emerald-600 font-semibold">Add Veg</h3>
 
       <form onSubmit={handleAddProduct} className="flex flex-col items-end">
         <div className="flex flex-col md:flex-row gap-3 w-full relative">
@@ -79,19 +79,20 @@ const VegForm = () => {
             onChange={handleChange}
             onFocus={() => setShowSuggestions(true)} 
             placeholder="भाजीचे नाव टाइप करा किंवा निवडा"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+
+            className="input input-accent"
             autoComplete="off"
           />
 
           {/* Suggestion dropdown */}
           {showSuggestions &&
             filteredVeggies.length > 0 && (
-              <ul className="absolute top-12 left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto z-10">
+              <ul className="absolute top-10 left-0 md:w-[32%] w-full bg-white border border-teal-400 rounded-md shadow-md max-h-70 overflow-y-auto z-10">
                 {filteredVeggies.map((veg) => (
                   <li
                     key={veg.id}
                     onClick={() => handleSelectVeg(veg.marathiName)}
-                    className="px-3 py-1 hover:bg-green-100 cursor-pointer"
+                    className="px-3 py-2 w-full hover:bg-green-100 cursor-pointer"
                   >
                     {veg.marathiName}
                   </li>
@@ -106,7 +107,7 @@ const VegForm = () => {
             onChange={handleChange}
             type="number"
             placeholder="Weight"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="input input-accent"
           />
 
           <input
@@ -115,7 +116,7 @@ const VegForm = () => {
             onChange={handleChange}
             type="number"
             placeholder="Rate/kg"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="input input-accent"
           />
         </div>
 
@@ -126,7 +127,7 @@ const VegForm = () => {
           Add Product
         </button>
       </form>
-    </Wrapper>
+    </div>
   );
 };
 

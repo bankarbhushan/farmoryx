@@ -1,7 +1,8 @@
 import { useBill } from "../context/BillContext";
 
 const Bill = () => {
-  const { products, generalInfo ,billData} = useBill();
+  const { products, generalInfo ,setFormData} = useBill();
+
   
 
   const user = generalInfo.user;
@@ -58,14 +59,21 @@ const Bill = () => {
               const OneProductCommition = (oneProduct_Total*8)/100
               const OneProductNetTotal = oneProduct_Total - OneProductCommition;
               return(
-              <tr key={index}>
+                <tr key={index} onClick={() =>
+                  setFormData(prev => ({
+                    ...prev,
+                    productName: prod.productName,
+                    weight: prod.weight,
+                    rate: prod.rate
+                  }))
+                }>
                 <td className="border px-2 py-1">{index + 1}</td>
                 <td className="border px-2 py-1">{prod.productName}</td>
                 <td className="border px-2 py-1">{prod.weight}</td>
                 <td className="border px-2 py-1">{prod.rate}</td>
-                <td className="border px-2 py-1">₹{oneProduct_Total}</td>
+                <td className="border px-2 py-1">₹{oneProduct_Total.toFixed(0)}</td>
                  {user === "farmer" && <td className="border px-2 py-1">₹{OneProductCommition}</td>}
-                <td className="border px-2 py-1 font-semibold">₹{OneProductNetTotal}</td>
+                <td className="border px-2 py-1 font-semibold">₹{OneProductNetTotal.toFixed(0)}</td>
               </tr>
             )})}
           </tbody>

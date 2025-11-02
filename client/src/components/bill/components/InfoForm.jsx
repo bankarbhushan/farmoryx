@@ -1,5 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useBill } from "../context/BillContext";
+import Wrapper from "../../constants/Wrapper";
+import UserContextProvider from "../../../context/userContextProvider";
+import UserContext from "../../../context/userContext";
+
 
 const InfoForm = () => {
   const { addGeneralInfo } = useBill();
@@ -54,6 +58,7 @@ const InfoForm = () => {
   const [showUser,setShowUser] = useState(false)
 
   const [formData, setFormData] = useState({
+    broker_id :"yogesh_123",
     user: "",
     date: "",
     day: "",
@@ -64,9 +69,16 @@ const InfoForm = () => {
     externalVegCost: 0
   });
 
+  const { setUserName } = useContext(UserContext);
+
   // Handle input changes
   const onChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "broker_id") {
+    setUserName(value);
+  }
+
     if(name==="user"){
       setShowUser(true);
       formData.name = "";
@@ -125,91 +137,131 @@ const InfoForm = () => {
   };
 
   return (
-    <div className="relative">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        {/* User Type */}
-        <select
-          name="user"
-          value={formData.user}
-          onChange={onChange}
-          className="select select-accent"
-          required
-        >
-          <option value="" disabled>
-            Who is Bill User?
-          </option>
-          <option value="farmer">शेतकरी</option>
-          <option value="merchant">व्यापारी</option>
-        </select>
-
-        {/* Farmer Name Input */}
-        <div className="relative" ref={suggestionRef}>
-          { showUser &&
-          
-                      <div>
-              <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={onChange}
-            placeholder={`${formData.user} नाव टाइप करा किंवा निवडा`}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            onFocus={() => setShowSuggestions(true)}
-            autoComplete="off"
-            required
-          />
-
-          {showSuggestions && formData.name && filteredUser.length > 0 && (
-            <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto z-10">
-              {filteredUser.map((user) => (
-                <li
-                  key={user.mobile}
-                  onClick={() => handleSelectUser(user)}
-                  className="px-3 py-2 hover:bg-green-100 cursor-pointer"
-                >
-                  {user.name} <span className="text-gray-500">({user.village})</span>
-                </li>
-              ))}
-            </ul>
-          )}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white border border-gray-200 shadow-md rounded-xl p-6 flex flex-col gap-6"
+      >
+        {/* --- Row 1: Broker, User, Name --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Broker */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">दलाल</label>
+              <select
+                name="broker_id"
+                value={formData.broker_id}
+                className="select select-accent"
+                required
+                onChange={onChange}
+              >
+                <option value="Yogesh Gotephode">Yogesh Gotephode</option>
+                <option value="Bhushan Bankar">Bhushan Bankar</option>
+              </select>
           </div>
-          }
 
-          
+          {/* Bill User Type */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">शेतकरी / व्यापारी</label>
+            <select
+              name="user"
+              value={formData.user}
+              onChange={onChange}
+              className="select select-accent"        
+              required
+            >
+              <option value="" disabled>
+                Select User
+              </option>
+              <option value="farmer">शेतकरी</option>
+              <option value="merchant">व्यापारी</option>
+            </select>
+          </div>
+
+          {/* Name Input + Suggestions */}
+          <div className="flex flex-col relative" ref={suggestionRef}>
+            <label className="text-sm font-medium text-red-700 mb-1">
+              {formData.user
+                ? `${formData.user === "farmer" ? "शेतकरी" : "व्यापारी"} नाव`
+                : "नाव"}
+            </label>
+            {showUser && (
+              <>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={onChange}
+                  placeholder={`${formData.user || "User"} नाव टाइप करा किंवा निवडा`}
+                  className="input input-accent"      
+                  onFocus={() => setShowSuggestions(true)}
+                  autoComplete="off"
+                  required
+                />
+
+                {/* Suggestion Dropdown */}
+                {showSuggestions && formData.name && filteredUser.length > 0 && (
+                  <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-10">
+                    {filteredUser.map((user) => (
+                      <li
+                        key={user.mobile}
+                        onClick={() => handleSelectUser(user)}
+                        className="px-3 py-2 hover:bg-green-100 cursor-pointer"
+                      >
+                        {user.name}{" "}
+                        <span className="text-gray-500 text-sm">
+                          ({user.village})
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
-        {/* Date */}
-        <input
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={onChange}
-          className="input"
-          required
-        />
+        {/* --- Row 2: Mobile, Date, Patti --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Mobile */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              मोबाईल नंबर
+            </label>
+            <input
+              type="tel"
+              name="mobile"
+              value={formData.mobile}
+              onChange={onChange}
+              placeholder="मोबाइल नंबर टाइप करा"
+              className="input input-accent"      
+              required
+            />
+          </div>
 
-        {/* Mobile */}
-        <input
-          type="tel"
-          name="mobile"
-          value={formData.mobile}
-          onChange={onChange}
-          placeholder="मोबाइल नंबर टाइप करा"
-          className="input"
-          required
-        />
+          {/* Date */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">तारीख</label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={onChange}
+              className="w-full px-3 py-2 border border-teal-400 rounded-md bg-gray-50 hover:bg-white transition focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
 
-        {/* Patti + Advance + External Cost */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-3">
+          {/* Patti */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              पट्टी
+            </label>
             <select
               name="patti"
               value={formData.patti}
               onChange={onChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
-            >
+              className="select select-accent"      >
               <option value="" disabled>
-                Patti
+                Select Patti
               </option>
               {[0, 10, 20, 30, 50, 100, 150, 200, 300, 500, 1000].map((p) => (
                 <option key={p} value={p}>
@@ -217,7 +269,16 @@ const InfoForm = () => {
                 </option>
               ))}
             </select>
+          </div>
+        </div>
 
+        {/* --- Row 3: Advance, External Veg Cost --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Advance Paid */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              नगदी दिलेली रक्कम
+            </label>
             <input
               type="number"
               name="advancePaid"
@@ -225,11 +286,15 @@ const InfoForm = () => {
               onChange={onChange}
               min="0"
               placeholder="नगदी दिलेली रक्कम"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
+              className="input input-accent"      
             />
           </div>
 
-          <div className="flex flex-col gap-3">
+          {/* External Veg Cost */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              इतर शेतकऱ्यांच्या मालाचे पैसे
+            </label>
             <input
               type="number"
               name="externalVegCost"
@@ -237,19 +302,21 @@ const InfoForm = () => {
               onChange={onChange}
               min="0"
               placeholder="इतर शेतकऱ्यांच्या मालाचे पैसे"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
+              className="input input-accent"      
             />
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="mt-2 w-full md:w-fit px-5 py-2 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
-        >
-          Add Details
-        </button>
+        {/* --- Submit Button --- */}
+        <div className="flex justify-end mt-2">
+          <button
+            type="submit"
+            className="px-8 py-2.5 w-full md:w-fit bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 hover:shadow-md transition duration-200 cursor-pointer"
+          >
+            Add Details
+          </button>
+        </div>
       </form>
-    </div>
   );
 };
 

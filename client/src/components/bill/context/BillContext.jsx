@@ -7,7 +7,9 @@ export const useBill = () => useContext(BillContext);
 export const BillProvider = ({ children }) => {
   const [generalInfo, setGeneralInfo] = useState({});
   const [products, setProducts] = useState([]);
+  const [calulation,setCalulation]= useState([]);
   const [billData, setBillData] = useState({ generalInfo: {}, products: [] });
+
 
 
   useEffect(() => {
@@ -42,6 +44,8 @@ export const BillProvider = ({ children }) => {
         billData,
         setBillData,
         resetBill,
+        calulation,
+        setCalulation
       }}
     >
       {children}
