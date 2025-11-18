@@ -8,7 +8,7 @@ const ActionButtons = () => {
   console.log("product" ,products)
   const user = generalInfo.user;
   const phoneNumber = generalInfo.mobile;
-  const [isActionActive, setActionActive] = useState(true);
+  const [isActionActive, setActionActive] = useState(false);
   console.log(billData);
 
     // ✅ Perform all calculations
@@ -118,7 +118,7 @@ const ActionButtons = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-end gap-4 mt-6">
+    <div className="flex  flex-col md:flex-row justify-end gap-4 mt-6">
       {isActionActive ? (
         <>
           <button
@@ -127,13 +127,6 @@ const ActionButtons = () => {
             className="bg-green-600 cursor-pointer w-full md:w-fit hover:bg-green-700 text-white px-4 py-2 rounded-md"
           >
             WhatsApp ने पाठवा
-          </button>
-
-          <button
-            type="button"
-            className="bg-amber-500 cursor-pointer w-full md:w-fit hover:bg-amber-600 text-white px-4 py-2 rounded-md"
-          >
-            प्रिंट करा
           </button>
         </>
       ) : (

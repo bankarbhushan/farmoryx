@@ -3,7 +3,6 @@ import Wrapper from '../constants/Wrapper'
 import InfoForm from "./components/InfoForm"
 import VegForm from './components/VegForm'
 import BillForm from './components/BillForm'
-import ActionButtons from './components/ActionButtons'
 import { BillProvider } from './context/BillContext'
 
 const Bill = () => {
@@ -17,7 +16,6 @@ const Bill = () => {
                 <VegForm/>
             </div>
             <BillForm/>
-            <ActionButtons/>
         </div>
       </Wrapper>
     </BillProvider>

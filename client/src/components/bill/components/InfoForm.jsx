@@ -144,8 +144,8 @@ const InfoForm = () => {
         {/* --- Row 1: Broker, User, Name --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Broker */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">दलाल</label>
+          <div className="flex items-center gap-2">
+            <label className="text-sm min-w-[40%] font-medium text-gray-700 mb-1">दलाल</label>
               <select
                 name="broker_id"
                 value={formData.broker_id}
@@ -159,8 +159,8 @@ const InfoForm = () => {
           </div>
 
           {/* Bill User Type */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">शेतकरी / व्यापारी</label>
+          <div className="flex items-center gap-2">
+            <label className="text-sm min-w-[40%] font-medium text-gray-700 mb-1">शेतकरी / व्यापारी</label>
             <select
               name="user"
               value={formData.user}
@@ -177,8 +177,8 @@ const InfoForm = () => {
           </div>
 
           {/* Name Input + Suggestions */}
-          <div className="flex flex-col relative" ref={suggestionRef}>
-            <label className="text-sm font-medium text-red-700 mb-1">
+          <div className="flex items-center relative gap-2" ref={suggestionRef}>
+            <label className="text-sm min-w-[40%] font-medium text-red-700 mb-1">
               {formData.user
                 ? `${formData.user === "farmer" ? "शेतकरी" : "व्यापारी"} नाव`
                 : "नाव"}
@@ -222,8 +222,8 @@ const InfoForm = () => {
         {/* --- Row 2: Mobile, Date, Patti --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Mobile */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">
+          <div className="flex items-center gap-2">
+            <label className="text-sm min-w-[40%] font-medium text-gray-700 mb-1">
               मोबाईल नंबर
             </label>
             <input
@@ -238,8 +238,8 @@ const InfoForm = () => {
           </div>
 
           {/* Date */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">तारीख</label>
+          <div className="flex items-center gap-2">
+            <label className="text-sm min-w-[40%] font-medium text-gray-700 mb-1">तारीख</label>
             <input
               type="date"
               name="date"
@@ -251,8 +251,8 @@ const InfoForm = () => {
           </div>
 
           {/* Patti */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">
+          <div className="flex items-center gap-2">
+            <label className="text-sm min-w-[40%] font-medium text-gray-700 mb-1">
               पट्टी
             </label>
             <select
@@ -275,8 +275,8 @@ const InfoForm = () => {
         {/* --- Row 3: Advance, External Veg Cost --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Advance Paid */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium min-w-[40%]  text-gray-700 mb-1">
               नगदी दिलेली रक्कम
             </label>
             <input
@@ -291,8 +291,8 @@ const InfoForm = () => {
           </div>
 
           {/* External Veg Cost */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">
+          <div className="flex items-center gap-2">
+            <label className="text-sm min-w-[40%] font-medium text-gray-700 mb-1">
               इतर शेतकऱ्यांच्या मालाचे पैसे
             </label>
             <input
