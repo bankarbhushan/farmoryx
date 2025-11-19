@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useBill } from "../context/BillContext";
-import Wrapper from "../../constants/Wrapper";
-import UserContextProvider from "../../../context/userContextProvider";
 import UserContext from "../../../context/userContext";
 
 
@@ -227,9 +225,14 @@ const InfoForm = () => {
               मोबाईल नंबर
             </label>
             <input
-              type="tel"
+              type="number"
               name="mobile"
+              onKeyDown={(e)=>{if(["e","E","+","-"].includes(e.key) )e.preventDefault()}}
               value={formData.mobile}
+              // onChange={(e)=>{
+              //   const cleaned = e.target.value.replace(/[eE+\-]/g,"");
+              //   onChange(()=>cleaned)
+              // }}
               onChange={onChange}
               placeholder="मोबाइल नंबर टाइप करा"
               className="input input-accent"      
@@ -282,9 +285,11 @@ const InfoForm = () => {
             <input
               type="number"
               name="advancePaid"
+              onKeyDown={(e)=>{if(["e","E","+","-"].includes(e.key)) e.preventDefault()}}
               value={formData.advancePaid}
               onChange={onChange}
               min="0"
+              max="10000"
               placeholder="नगदी दिलेली रक्कम"
               className="input input-accent"      
             />
@@ -298,6 +303,7 @@ const InfoForm = () => {
             <input
               type="number"
               name="externalVegCost"
+              onKeyDown={(e)=>{if(["e","E","+","-"].includes(e.key)) e.preventDefault()}}
               value={formData.externalVegCost}
               onChange={onChange}
               min="0"

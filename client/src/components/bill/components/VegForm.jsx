@@ -88,7 +88,12 @@ const VegForm = () => {
           <input
             name="weight"
             value={formData.weight}
-            onChange={handleChange}
+            onKeyDown={(e)=>{
+              if(["e","E","+","-"].includes(e.key)) e.preventDefault();
+            }}
+            onChange={(e)=>{
+            const cleaned = e.target.value.replace(/[eE+\-]/g, "");
+              handleChange({target:{name:"weight",value:cleaned}})}}
             type="number"
             placeholder="Weight"
             className="input input-accent"
@@ -97,7 +102,12 @@ const VegForm = () => {
           <input
             name="rate"
             value={formData.rate}
-            onChange={handleChange}
+            onKeyDown={(e)=>{if(["e","E","+","-"].includes(e.key)) e.preventDefault()}}
+            
+            onChange={(e)=>{
+              const cleaned = e.target.value.replace(/[eE+\-]/g,"");
+              handleChange({target:{name:"rate",value:cleaned}})
+            }}
             type="number"
             placeholder="Rate/kg"
             className="input input-accent"

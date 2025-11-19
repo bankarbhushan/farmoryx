@@ -74,7 +74,7 @@ const Bill = () => {
               <td className="border px-1 py-1">{p.productName}</td>
               <td className="border px-1 py-1">{p.weight}</td>
               <td className="border px-1 py-1">₹{p.rate}</td>
-              <td className="border px-1 py-1">₹{commission.toFixed(0)}</td>
+             {user === "farmer" && <td className="border px-1 py-1">₹{commission.toFixed(0)}</td>}
               <td className="border px-1 py-1">₹{(p.weight * p.rate).toFixed(0)}</td>
             </tr>
           ))}
