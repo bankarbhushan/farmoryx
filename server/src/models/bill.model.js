@@ -1,115 +1,53 @@
-// import mongoose,{Schema} from "mongoose";
-
-// // Define item schema used in bills
-// const productItemSchema = new Schema({
-//   name: String,
-//   rate: Number,
-//   weight: Number,
-//   total: Number,
-// });
-
-// const billSchema = new mongoose.Schema(
-//   {
-//     farmerId: {
-//       type: mongoose.Schema.Types.String,
-//       ref: "Farmer",
-//       required: true,
-//     },
-//     merchantId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Merchant",
-//       required: true,
-//     },
-//     brokerId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Broker",
-//       required: true,
-//     },
-//     supplyDate: {
-//       type: Date,
-//       default: Date.now,
-//     },
-//     items: [productItemSchema],
-//     subtotal: { type: Number, required: true },
-//     commissionAmount: Number,
-//     pattiCharges: { type: Number, default: 10 },
-//     advancePaid: { type: Number, default: 0 },
-//     externalVegCost: { type: Number, default: 0 },
-//     netTotal: Number,
-//     paymentStatus: {
-//       type: String,
-//       enum: ["pending", "paid"],
-//       default: "pending",
-//     },
-    // billNumber: { type: String, unique: true },
-    // isBillGenerated: { type: Boolean, default: false },
-    // pdfUrl: String,
-    // isSharedToWhatsApp: { type: Boolean, default: false },
-//   },
-//   { timestamps: true }
-// );
-
-// export const Bill =  mongoose.model("Bill", billSchema);
-
-
-import mongoose , {Schema} from "mongoose"
+import mongoose, { Schema } from "mongoose";
 
 const productItemSchema = new Schema({
-    name:String,
-    rate:Number,
-    weight:Number,
-    productItemTotal:Number
-})
+  productName: { type: String, required: true },
+  weight: { type: Number, required: true },
+  rate: { type: Number, required: true },
+  productItemTotal: { type: Number, required: true }
+});
 
-const billSchema = new Schema({
-    farmerId :{
-        type:mongoose.Schema.Types.String,
-        ref:"Farmer",
-        required:["Farmer Id is required."]
+const billSchema = new Schema(
+  {
+    userType: {
+      type: String,
+      enum: ["farmer", "merchant"],
+      required: true
     },
-    brokerId:{
-        type:mongoose.Schema.Types.String,
-        ref:"Broker",
-        required:[true,"Broker id is required."]
+    userName: String,
+    userMobile: String,
+    brokerId: {
+      type: String,
+      ref: "Broker",
+      required: [true, "Broker id is required."]
     },
-    Date:{
-        type :Date,
-        required:[true,"Date is required."]
+    billDate: {
+      type: String, 
+      required: true
     },
-    items:[productItemSchema],
-    subtotal: { 
-        type: Number, 
-        required: true 
+    weekday: {
+      type: String, 
+      required: true
     },
-    commissionAmount: Number,
-    pattiCharges: {
-         type: Number, 
-         default: 10 
+    items: [productItemSchema],
+    totalAmount: Number,         
+    commissionAmount: Number,    
+    pattiCharges: Number,
+    advancePaid: Number,
+    externalVegCost: Number,
+    netTotal: Number,           
+    isBillGenerated: {
+      type: Boolean,
+      default: false
     },
-    advancePaid: { 
-        type: Number, 
-        default: 0 
-    },
-    externalVegCost: { 
-        type: Number, 
-        default: 0 
-    },
-    netTotal: Number,
-    billNumber: { 
-        type: Number, 
-        unique: true 
-    },
-    isBillGenerated: { 
-        type: Boolean,
-        default: false 
-    },
-    pdfUrl: String,
-    isSharedToWhatsApp: { 
-        type: Boolean, 
-        default: false 
-    },
-},{
-    timestamps:true
-})
+    isSharedToWhatsApp: {
+      type: Boolean,
+      default: false
+    }
+  },
+  { timestamps: true }
+);
 
-export const Bill = mongoose.model("Bill",billSchema)
+
+
+export const Bill = mongoose.model("Bill", billSchema);

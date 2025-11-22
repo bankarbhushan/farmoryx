@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useBill } from "../context/BillContext";
+import toast from "react-hot-toast";
 
 const VegForm = () => {
   const vegitables = [
@@ -32,13 +33,15 @@ const VegForm = () => {
   const handleAddProduct = (e) => {
     e.preventDefault();
     if (!formData.productName || !formData.weight || !formData.rate) {
-      alert("Please fill all fields!");
+      toast.error("Please fill all fields!");
       return;
     }
 
     addProduct(formData);
     setFormData({ productName: "", weight: "", rate: "" });
+    toast.success(`Product ${formData.productName}.`);
     setShowSuggestions(false);
+
   };
 
   // Filter vegetables dynamically
