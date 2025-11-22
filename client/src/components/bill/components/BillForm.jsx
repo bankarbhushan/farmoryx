@@ -6,14 +6,15 @@ const Bill = () => {
   const { products, generalInfo, setFormData, setEditIndex } = useBill();
   const printRef = useRef();
 
-  const user = generalInfo.user;
-  const totalAmount = products.reduce((acc, p) => acc + p.weight * p.rate, 0);
-  const commission = user === "farmer" ? (totalAmount * 8) / 100 : 0;
-  const subTotal = totalAmount - commission;
-  const patti = Number(generalInfo.patti || 0);
+  const userType = generalInfo.userType;
+  const totalAmount = products.reduce((acc, p) => {
+    return acc + Number(p.weight) * Number(p.rate);
+  }, 0);
+  const commission = userType === "farmer" ? (totalAmount * 8) / 100 : 0;
+  const pattiCharges = Number(generalInfo.pattiCharges || 0);
   const advancePaid = Number(generalInfo.advancePaid || 0);
   const externalVegCost = Number(generalInfo.externalVegCost || 0);
-  const finalAmount = totalAmount - (commission + patti + advancePaid + externalVegCost);
+  const netTotal = Number(totalAmount - (commission + pattiCharges + advancePaid + externalVegCost));
 
   const handleEdit = (index, product) => {
     setFormData(product);
@@ -27,7 +28,7 @@ const Bill = () => {
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-      window.location.reload();
+      // window.location.reload();
   };
 
   const BillContent = () => (
@@ -40,19 +41,19 @@ const Bill = () => {
 
       <div className="flex justify-between border-b pb-2 mb-2">
         <div>
-          <p>{generalInfo.user} नाव: <b>{generalInfo.name|| "____"}</b></p>
-          <p>फोन नंबर: <b>{generalInfo.mobile || "____"}</b></p>
+          <p>{generalInfo.userType} नाव: <b>{generalInfo.userName|| "____"}</b></p>
+          <p>फोन नंबर: <b>{generalInfo.userMobile || "____"}</b></p>
           <p>मालक नाव: <b>योगेश गोटेफोडे</b></p>
         </div>
         <div>
         <p>
           दिनांक: {
-            generalInfo.date
-              ? new Intl.DateTimeFormat('mr-IN', { dateStyle: 'short' }).format(new Date(generalInfo.date))
+            generalInfo.billDate
+              ? new Intl.DateTimeFormat('mr-IN', { dateStyle: 'short' }).format(new Date(generalInfo.billDate))
               : new Intl.DateTimeFormat('mr-IN', { dateStyle: 'short' }).format(new Date())
           }
         </p>
-          <p>वार: {generalInfo.day || ""}</p>
+          <p>वार: {generalInfo.weekday || ""}</p>
         </div>
       </div>
 
@@ -63,7 +64,7 @@ const Bill = () => {
             <th className="border px-1 py-1">भाजी</th>
             <th className="border px-1 py-1">वजन</th>
             <th className="border px-1 py-1">दर</th>
-            {user === "farmer" &&<th className="border px-1 py-1">commission</th>}
+            {userType === "farmer" &&<th className="border px-1 py-1">कमिशन</th>}
             <th className="border px-1 py-1">रक्कम</th>
           </tr>
         </thead>
@@ -74,24 +75,30 @@ const Bill = () => {
               <td className="border px-1 py-1">{p.productName}</td>
               <td className="border px-1 py-1">{p.weight}</td>
               <td className="border px-1 py-1">₹{p.rate}</td>
-             {user === "farmer" && <td className="border px-1 py-1">₹{commission.toFixed(0)}</td>}
+             {userType === "farmer" && <td className="border px-1 py-1">₹{commission.toFixed(0)}</td>}
               <td className="border px-1 py-1">₹{(p.weight * p.rate).toFixed(0)}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="text-right mt-2 space-y-0.5">
-        <p>एकूण: ₹{totalAmount.toFixed(0)}</p>
-        {user === "farmer" && <p>कमिशन (8%): ₹{commission.toFixed(0)}</p>}
-        <p>पट्टी (-): ₹{patti}</p>
-        <p>नगदी (-): ₹{advancePaid.toFixed(0)}</p>
-        <p>इतर माल (-): ₹{externalVegCost.toFixed(0)}</p>
-        <hr />
-        <p className="font-bold text-red-800 text-sm mt-1">
-          अंतिम रक्कम: ₹{finalAmount.toFixed(0)}
+      <div className="text-right w-full mt-2 space-y-0.5">
+        <div className="">
+        <p className={userType === "farmer" ? "pr-[8%]" : "pr-[11%]"}>
+          एकूण: ₹{totalAmount.toFixed(0)}
         </p>
+          <hr />
+          {userType === "farmer" && <p className={userType === "farmer" ? "pr-[8%]" : "pr-[11%]"}>कमिशन (8%): ₹{commission.toFixed(0)}</p>}
+          <p className={userType === "farmer" ? "pr-[8%]" : "pr-[11%]"} >पट्टी (-): ₹{pattiCharges}</p>
+          <p className={userType === "farmer" ? "pr-[8%]" : "pr-[11%]"}>नगदी (-): ₹{advancePaid.toFixed(0)}</p>
+          <p className={userType === "farmer" ? "pr-[8%]" : "pr-[11%]"}>इतर माल (-): ₹{externalVegCost.toFixed(0)}</p>
+          <hr />
+          <p className={userType === "farmer" ? "pr-[8%]  text-red-800 text-md mt-1" : "pr-[11%] font-bold  text-red-800 text-md mt-1"}>
+            अंतिम रक्कम: ₹{netTotal.toFixed(0)}
+          </p>
+        </div>
       </div>
+
 
       <div className="text-center text-xs mt-2 text-gray-600">
         <p>🌿 माऊली भाजी भांडार | धन्यवाद 🙏</p>

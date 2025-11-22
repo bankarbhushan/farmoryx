@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "../constants/Wrapper";
 import Loader from "../constants/Loader";
 import FarmerModal from "./FarmerModal";
+import toast from "react-hot-toast";
+
 
 const FarmerList = () => {
   // State: Farmers
@@ -50,7 +52,7 @@ const FarmerList = () => {
       setShowForm(false); // Hide form after adding
       closeModal();
     } else {
-      alert("Please fill all fields.");
+      toast.error("Please fill all fields.");
     }
   };
   

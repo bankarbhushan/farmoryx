@@ -7,7 +7,7 @@ export const BillProvider = ({ children }) => {
   const [generalInfo, setGeneralInfo] = useState({});
   const [products, setProducts] = useState([]);
   const [calulation, setCalulation] = useState([]);
-  const [billData, setBillData] = useState({ generalInfo: {}, products: [] });
+  // const [billData, setBillData] = useState({ generalInfo: {}, products: [] });
   const [editIndex, setEditIndex] = useState(null);
 
   // 🔹 Shared form data for product editing
@@ -17,9 +17,7 @@ export const BillProvider = ({ children }) => {
     rate: ""
   });
 
-  useEffect(() => {
-    setBillData({ generalInfo, products });
-  }, [generalInfo, products]);
+
 
   // Add product
   const addProduct = useCallback(
@@ -45,7 +43,6 @@ export const BillProvider = ({ children }) => {
   const resetBill = useCallback(() => {
     setGeneralInfo({});
     setProducts([]);
-    setBillData({});
   }, []);
 
   return (
@@ -56,8 +53,6 @@ export const BillProvider = ({ children }) => {
         addGeneralInfo,
         products,
         addProduct,
-        billData,
-        setBillData,
         resetBill,
         calulation,
         setCalulation,

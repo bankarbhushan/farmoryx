@@ -1,124 +1,106 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useBill } from "../context/BillContext";
+import toast from "react-hot-toast";
+import Loader from "../../constants/Loader";
+
 
 const ActionButtons = () => {
-  const { billData, setCalulation } = useBill();
-  const { generalInfo, products } = billData;
-  console.log("product" ,products)
-  const user = generalInfo.user;
-  const phoneNumber = generalInfo.mobile;
+  const { generalInfo, products ,setCalulation } =  useBill();
+  const userType = generalInfo.userType;
   const [isActionActive, setActionActive] = useState(false);
-  console.log(billData);
-
-    // ✅ Perform all calculations
-    const totalAmount = products.reduce((acc, p) => acc + p.weight * p.rate, 0);
-    const commission = user === "farmer" ? (totalAmount * 8) / 100 : 0;
-    const subTotal = totalAmount - commission;
-    const patti = Number(generalInfo.patti || 0);
-    const advancePaid = Number(generalInfo.advancePaid || 0);
-    const externalVegCost = Number(generalInfo.externalVegCost || 0);
-    const totalDeductions =
-    commission + patti + advancePaid + externalVegCost;
-    const finalAmount = totalAmount - totalDeductions; 
+  const [loading, setLoading] = useState(false);
 
 
+  const totalAmount = products.reduce((acc, p) => {
+    return acc + Number(p.weight) * Number(p.rate);
+  }, 0);
+  const commissionAmount = userType === "farmer" ? (totalAmount * 8) / 100 : 0;
+  const pattiCharges = Number(generalInfo.pattiCharges || 0);
+  const advancePaid = Number(generalInfo.advancePaid || 0);
+  const externalVegCost = Number(generalInfo.externalVegCost || 0);
+  const netTotal = Number(totalAmount - (commissionAmount + pattiCharges + advancePaid + externalVegCost));
 
-  // const totalAmount = products.reduce((acc, p) => acc + p.weight * p.rate, 0);
-  // const commission = user === "farmer" ? (totalAmount * 8) / 100 : 0;
-  // const subTotal = totalAmount - commission;
-  // const patti = Number(generalInfo.patti || 0);
-  // const advancePaid = Number(generalInfo.advancePaid || 0);
-  // const externalVegCost = Number(generalInfo.externalVegCost || 0);
-  // const totalDeductions = commission + patti + advancePaid + externalVegCost;
-  // const finalAmount = totalAmount - totalDeductions;
 
-  // 🟢 Function to handle SAVE button
+  // Function to handle SAVE button
   const handleSave = async () => {
-    if (!billData.generalInfo.user || billData.products.length === 0) {
-      alert("कृपया सर्व माहिती पूर्ण भरा (User आणि Products)");
+    if (!generalInfo.userType || products.length === 0) {
+      toast.error("Please fill all data.");
       return;
     }
-
-    // 💾 Save calculations in context
+    setLoading(true);
     const calData = {
       totalAmount,
-      commission,
-      subTotal,
-      patti,
+      commissionAmount,
+      pattiCharges,
       advancePaid,
       externalVegCost,
-      totalDeductions,
-      finalAmount,
+      netTotal,
     };
 
     setCalulation(calData);
 
-    // 📦 Final payload
-    const payload = { ...billData, calculation: calData };
-    console.log("payload ==>", payload);
+    const payload = {
+      generalInfo,
+      products,
+      calculation: calData
+    };
+
+    console.log("PayLoad ==>" , payload)
 
     try {
       const res = await axios.post(
         "http://localhost:3000/api/v1/bill/createbill",
         { bill: payload }
       );
-      console.log("✅ Bill saved successfully:", res.data);
+      console.log("Bill saved:", res.data);
       setActionActive(true);
+       toast.success(res.data.message || "Bill Saved Successfully!");
+       setLoading(false)
     } catch (err) {
-      console.error("❌ Error saving bill:", err);
-      alert("बिल सेव्ह करताना काही त्रुटी आली!");
+      console.error("Error:", err);
+      toast.error("Fail to Bill Saved Successfully!");
     }
   };
 
-  // 🟢 Function to handle WhatsApp message
-  const handleSendWhatsApp = () => {
-    if (!billData.generalInfo.user || billData.products.length === 0) {
-      alert("कृपया सर्व माहिती पूर्ण भरा (User आणि Products)");
-      return;
-    }
-
-    const { generalInfo, products, calculation } = billData;
-
+  // Function to handle WhatsApp message
+const handleSendWhatsApp = () => {
   let message = `*माऊली भाजी भांडार बिल* \n\n`;
 
-  message += ` *नाव:* ${generalInfo.name}\n`;
-  message += `*फोन नंबर:* ${generalInfo.mobile}\n`;
-  message += ` *मालक नाव:* ${generalInfo.broker_id}\n`;
-  message += `*दिनांक:* ${generalInfo.date || new Date().toLocaleDateString()}\n`;
-  message += `*वार:* ${generalInfo.day}\n\n`;
+  message += `*नाव:* ${generalInfo.userName}\n`;
+  message += `*फोन नंबर:* ${generalInfo.userMobile}\n`;
+  message += `*मालक नाव:* ${generalInfo.broker_id}\n`;
+  message += `*दिनांक:* ${generalInfo.billDate || new Date().toLocaleDateString()}\n`;
+  message += `*वार:* ${generalInfo.weekday}\n\n`;
 
   message += `*भाज्यांची यादी:*\n`;
+
   products.forEach((p, index) => {
-    message += `${index + 1}. ${p.productName} - ${p.weight}kg × ₹${p.rate} = ₹${(
-      p.weight * p.rate
-    ).toFixed(0)}\n`;
+    const total = Number(p.weight) * Number(p.rate);
+    message += `${index + 1}. ${p.productName} - ${p.weight}kg × ₹${p.rate} = ₹${total}\n`;
   });
 
   message += `━━━━━━━━━━━━━━━━━━━\n`;
-  message += `*एकूण रक्कम:* ₹${totalAmount.toFixed(0)}\n`;
-  message += `*कमिशन (8%):* ₹${commission.toFixed(0)}\n`;
-  message += `*एकूण:* ₹${subTotal.toFixed(0)}\n`;
-  message += `*पट्टी (-):* ₹${patti.toFixed(0)}\n`;
-  message += `*नगदी दिलेली रक्कम (-):* ₹${advancePaid.toFixed(0)}\n`;
-  message += `*इतर शेतकऱ्यांचा माल (-):* ₹${externalVegCost.toFixed(0)}\n`;
+  message += `*एकूण रक्कम:* ₹${totalAmount}\n`;
+  message += `*कमिशन (8%):* ₹${commissionAmount}\n`;
+  message += `*पट्टी (-):* ₹${pattiCharges}\n`;
+  message += `*नगदी दिलेली रक्कम (-):* ₹${advancePaid}\n`;
+  message += `*इतर शेतकऱ्यांचा माल (-):* ₹${externalVegCost}\n`;
   message += `━━━━━━━━━━━━━━━━━━━\n`;
-  message += `\n*अंतिम रक्कम:* ₹${finalAmount.toFixed(0)}\n`;
-  message += `━━━━━━━━━━━━━━━━━━━\n\n*धन्यवाद!* `;
+  message += `\n*अंतिम रक्कम:* ₹${netTotal}\n`;
+  message += `━━━━━━━━━━━━━━━━━━━\n\n*धन्यवाद!*`;
 
-    // ✅ Encode message for URL
-    const encodedMsg = encodeURIComponent(message);
+  const encodedMsg = encodeURIComponent(message);
 
-    // 🔗 Create WhatsApp link (you can set broker/farmer number here)
-    // const phoneNumber = "91xxxxxxxxxx"; // replace with actual number
-    const whatsappUrl = `https://wa.me/${generalInfo.mobile}?text=${encodedMsg}`;
+  const whatsappUrl = `https://wa.me/${generalInfo.userMobile}?text=${encodedMsg}`;
 
-    // Open in new tab
-    window.open(whatsappUrl, "_blank");
-  };
+  window.open(whatsappUrl, "_blank");
+};
+
 
   return (
-    <div className="flex  flex-col md:flex-row justify-end gap-4 mt-6">
+    loading ? (<Loader />) : (
+      <div className="flex  flex-col md:flex-row justify-end gap-4 mt-6">
       {isActionActive ? (
         <>
           <button
@@ -139,6 +121,7 @@ const ActionButtons = () => {
         </button>
       )}
     </div>
+    )
   );
 };
 
