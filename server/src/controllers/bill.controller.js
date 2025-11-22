@@ -132,66 +132,73 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const createBill = asyncHandler(async (req, res) => {
+  const { generalInfo, products, calculation } = req.body.bill;
+
+  if (!generalInfo || !products || !calculation) {
+    throw new ApiError(400, "Invalid bill format.");
+  }
   const {
-    farmerId,
-    brokerId,
-    Date,
-    items,
-    subtotal,
-    commissionAmount,
+    userType,
+    broker_id: brokerId,
+    billDate,
+    weekday,
+    userName,
+    userMobile,
     pattiCharges,
     advancePaid,
-    externalVegCost,
-    billNumber,
-    netTotal
-  } = req.body;
+    externalVegCost
+  } = generalInfo;
 
-  if (
-    [
-      farmerId,
-      brokerId,
-      Date,
-      items,
-      subtotal,
-      pattiCharges,
-      advancePaid,
-      externalVegCost,
-      billNumber,
-      netTotal
-    ].some(field => field === undefined || field === null || field === "")
-  ) {
-    throw new ApiError(400, "All fields are required.");
+  // Extract calculation
+  const {
+    totalAmount,
+    commissionAmount,
+    netTotal
+  } = calculation;
+
+  // Validation
+  console.log(userType,brokerId,billDate,weekday)
+  
+  if (!userType  || !brokerId || !billDate || !weekday) {
+    throw new ApiError(400, "Missing required fields.");
   }
 
-  const billUser = await Bill.findById({farmerId})
+  if (!products || products.length === 0) {
+    throw new ApiError(400, "Products cannot be empty.");
+  }
 
-  if(!billUser) {
-    throw new ApiError(401,"This User is not existd");
-  };
-  
-  const existingBill = await Bill.findOne({ billNumber });
-  if (existingBill) throw new ApiError(409, "This bill already exists.");
+  // Prepare items array with productItemTotal
+  const items = products.map(item => ({
+    productName: item.productName,
+    weight: Number(item.weight),
+    rate: Number(item.rate),
+    productItemTotal: Number(item.weight) * Number(item.rate)
+  }));
 
+  // Create bill
   const bill = await Bill.create({
-    farmerId,
+    userType,
     brokerId,
-    Date,
+    billDate,
+    weekday,
+    userName,
+    userMobile,
     items,
-    subtotal,
+    totalAmount,
     commissionAmount,
     pattiCharges,
     advancePaid,
     externalVegCost,
-    billNumber,
-    netTotal
+    netTotal,
+    isBillGenerated: true
   });
 
-  if (!bill) throw new ApiError(500, "Something went wrong while creating the bill.");
-
-  res.status(201).json(
-    new ApiResponse(201, { bill }, "Bill Generation Successful.")
+  return res.status(201).json(
+    new ApiResponse(201, { bill }, "Bill Generated Successfully.")
   );
 });
+
+
 
 export { createBill };
 
