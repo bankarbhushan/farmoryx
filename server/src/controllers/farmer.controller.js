@@ -46,8 +46,6 @@ const createfarmer = asyncHandler(async (req, res) => {
   }
 });
 
-
-
 // GET ALL FARMERS
 const feedfarmer = asyncHandler(async (req, res) => {
   const farmers = await Farmer.find();
@@ -60,7 +58,6 @@ const feedfarmer = asyncHandler(async (req, res) => {
     new ApiResponse(200, farmers, "All farmers fetched successfully.")
   );
 });
-
 
 // UPDATE FARMER
 const updatefarmer = asyncHandler(async (req, res) => {
@@ -87,4 +84,22 @@ const updatefarmer = asyncHandler(async (req, res) => {
   );
 });
 
-export { createfarmer, feedfarmer, updatefarmer };
+// DELETE FARMER
+
+const deletefarmer = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const existingFarmer = await Farmer.findById(id);
+
+  if (!existingFarmer) {
+    throw new ApiError(404, "Farmer not found.");
+  }
+
+  const deletedFarmer = await Farmer.findByIdAndDelete(id);
+
+  return res.status(200).json(
+    new ApiResponse(200, deletedFarmer, "Farmer deleted successfully.")
+  );
+});
+
+export { createfarmer, feedfarmer, updatefarmer,deletefarmer };
