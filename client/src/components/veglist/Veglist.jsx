@@ -111,11 +111,11 @@ const Veglist = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Wrapper className="bg-white border border-[#E6E9EA] shadow-sm">
+        <Wrapper className="bg-[#FFFFFF] border border-[#E6E9EA] shadow-sm">
           <div className="flex justify-between items-center mb-5">
             <div>
               <h1 className="text-2xl font-semibold text-[#12202E]">Vegetable List</h1>
-              <p className="text-sm text-[#94A3B8] mt-1">Manage all vegetables in the system.</p>
+              <p className="text-sm text-[#94A3B8] font-light mt-1">Manage all vegetables in the system.</p>
             </div>
 
             <button
@@ -124,7 +124,7 @@ const Veglist = () => {
                 setNewVeg({ marathiName: "", hinglishName: "", englishName: "" });
                 openModal();
               }}
-              className="px-4 py-2 rounded-md bg-gray-700 text-white font-light shadow hover:bg-gray-800 transition"
+              className="px-4 py-2 rounded-md bg-gray-700 text-white font-light shadow hover:bg-gray-800 transition cursor-pointer"
             >
               + Add Vegetable
             </button>
@@ -139,7 +139,7 @@ const Veglist = () => {
             isEdit={!!editVeg}
           />
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-md">
             <table className="min-w-full">
               <thead className="bg-gray-200 text-[#12202E]">
                 <tr>
@@ -153,14 +153,14 @@ const Veglist = () => {
               <tbody>
                 {vegs.map((veg) => (
                   <tr key={veg._id} className="hover:bg-gray-50 transition">
-                    <td className="px-4 py-3">{veg.marathiName}</td>
-                    <td className="px-4 py-3">{veg.hinglishName}</td>
-                    <td className="px-4 py-3">{veg.englishName}</td>
+                    <td className="px-4 font-light py-3">{veg.marathiName}</td>
+                    <td className="px-4 font-light py-3">{veg.hinglishName}</td>
+                    <td className="px-4 font-light py-3">{veg.englishName}</td>
 
                     <td className="px-4 py-3 flex justify-center gap-3">
                       <button
                         onClick={() => handleOpenUpdate(veg)}
-                        className="px-3 py-1 rounded-md bg-[#17CF91] text-white text-sm shadow hover:bg-[#16C79A] transition"
+                        className="px-3 py-1 rounded-md bg-[#17CF91] text-white text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
                       >
                         Update
                       </button>
@@ -194,13 +194,13 @@ const Veglist = () => {
                       <div className="flex justify-end gap-3 mt-4">
                         <button
                           onClick={() => handleDeleteVeg(veg)}
-                          className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium"
+                          className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium cursor-pointer"
                         >
                           Yes, Delete
                         </button>
 
                         <form method="dialog">
-                          <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium">
+                          <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium cursor-pointer">
                             Cancel
                           </button>
                         </form>

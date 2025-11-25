@@ -20,7 +20,7 @@ const FarmerModal = ({
         </form>
 
         {/* Title */}
-        <h2 className="text-xl font-semibold text-[#0B1220] mb-6">
+        <h2 className="text-xl font-semibold text-[#0B1220] mb-6 cursor-pointer">
           {isEdit ? "Update Farmer" : "Add New Farmer"}
         </h2>
 
@@ -82,7 +82,7 @@ const FarmerModal = ({
             <div className="flex justify-end pt-2">
               <button
                 onClick={isEdit ? handleUpdateFarmer : handleAddFarmer}
-                className="px-6 py-2 rounded-lg bg-[#16C79A] text-white font-medium shadow hover:bg-[#11D18C] transition cursor-pointer"
+                className="px-6 py-2 rounded-lg bg-[#16C79A] text-white font-medium shadow hover:bg-[#11D18C] transition cursor-pointer cursor-pointer"
               >
                 {isEdit ? "Update Farmer" : "Add Farmer"}
               </button>
