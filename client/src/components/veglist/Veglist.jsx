@@ -1,146 +1,221 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Wrapper from "../constants/Wrapper";
 import Loader from "../constants/Loader";
 import Vegmodal from "./Vegmodal";
-
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Veglist = () => {
-  const [vegitables,setVegitables]=useState([
-     { id: 1, marathiName: "वांगे", hinglishName: "Vangi", englishName: "Brinjal" },
-  { id: 2, marathiName: "टोमॅटो", hinglishName: "Tamatar", englishName: "Tomato" },
-  { id: 3, marathiName: "बटाटा", hinglishName: "Batata", englishName: "Potato" },
-  { id: 4, marathiName: "कांदा", hinglishName: "Kanda", englishName: "Onion" },
-  { id: 5, marathiName: "भेंडी", hinglishName: "Bhendi", englishName: "Lady Finger (Okra)" },
-  { id: 6, marathiName: "दोडका", hinglishName: "Doodka", englishName: "Ridge Gourd" },
-  { id: 7, marathiName: "तोंडली", hinglishName: "Tondali", englishName: "Ivy Gourd" },
-  { id: 8, marathiName: "कोबी", hinglishName: "Kobi", englishName: "Cabbage" },
-  { id: 9, marathiName: "फुलकोबी", hinglishName: "Phulkobi", englishName: "Cauliflower" },
-  { id: 10, marathiName: "पालक", hinglishName: "Palak", englishName: "Spinach" },
-  { id: 11, marathiName: "मटार", hinglishName: "Matar", englishName: "Peas" },
-  { id: 12, marathiName: "गाजर", hinglishName: "Gajar", englishName: "Carrot" },
-  { id: 13, marathiName: "ढोबळी मिरची", hinglishName: "Dhobli Mirchi", englishName: "Capsicum" },
-  { id: 14, marathiName: "लसूण", hinglishName: "Lasun", englishName: "Garlic" },
-  { id: 15, marathiName: "आले", hinglishName: "Ale", englishName: "Ginger" },
-  { id: 16, marathiName: "कोथिंबीर", hinglishName: "Kothimbir", englishName: "Coriander" },
-  { id: 17, marathiName: "शेंगा", hinglishName: "Shenga", englishName: "Green Beans" },
-  { id: 18, marathiName: "मेथी", hinglishName: "Methi", englishName: "Fenugreek" },
-  { id: 19, marathiName: "मुळा", hinglishName: "Mula", englishName: "Radish" },
-  { id: 20, marathiName: "काकडी", hinglishName: "Kakdi", englishName: "Cucumber" },
-
-  ])
-
-  const [newVegitables,setNewVegitables]=useState({id:" ",marathiName:" ",hinglishName:" ",englishName:" " })
+  const [vegs, setVegs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [showForm,setShowForm]=useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editVeg, setEditVeg] = useState(null);
 
-  // Example: simulate loading
+  const [newVeg, setNewVeg] = useState({
+    marathiName: "",
+    hinglishName: "",
+    englishName: ""
+  });
+
+  const getVeg = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/v1/veg/feed");
+      setVegs(res.data.data);
+    } catch (error) {
+      const msg = error.response?.data?.message || "Something went wrong";
+      toast.error(msg);    
+    }
+  };
+
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000); // 2s delay
-    return () => clearTimeout(timer);
+    (async () => {
+      await getVeg();
+      setIsLoading(false);
+    })();
   }, []);
 
-  const handleAddVegitable=()=>{
-       
-    const {id,marathiName,hinglishName,englishName}=newVegitables;
-    if(id.trim() && marathiName.trim() && hinglishName.trim() && englishName.trim()){
-        console.log("Added:", newVegitables);
-      setVegitables([...vegitables,{id:id.trim(),marathiName:marathiName.trim(),hinglishName:hinglishName.trim(),englishName:englishName.trim()}])
-      setNewVegitables({});
-      setShowForm(false)
-      closeModal();
-    }
-  
-  }
+  const openModal = () => {
+    setShowForm(true);
+    document.getElementById("veg_modal").showModal();
+  };
 
-  const openModal=()=>{
-       setShowForm(true);
-       document.getElementById("my_modal_4").showModal();
-  }
-
-  const closeModal=()=>{
+  const closeModal = () => {
     setShowForm(false);
-    document.getElementById("my_modal_4")
+    document.getElementById("veg_modal").close();
+  };
+
+  const handleAddVeg = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/veg/add",
+        newVeg
+      );
+
+      toast.success(res.data.message);
+      await getVeg();
+      closeModal();
+      setNewVeg({ marathiName: "", hinglishName: "", englishName: "" });
+} catch (error) {
+  console.log("ERROR:", error);
+
+  const msg =
+    error.response?.data?.message ||   // APIError 
+    error.response?.data?.errors?.[0] || // Mongoose multiple errors (if any)
+    error.message || // JavaScript error
+    "Something went wrong";
+
+  toast.error(msg);
+}
   }
+
+  const handleOpenUpdate = (veg) => {
+    setEditVeg(veg);
+    setNewVeg({
+      marathiName: veg.marathiName,
+      hinglishName: veg.hinglishName,
+      englishName: veg.englishName
+    });
+    openModal();
+  };
+
+  const handleUpdateVeg = async () => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:3000/api/v1/veg/update/${editVeg._id}`,
+        newVeg
+      );
+
+      toast.success(res.data.message);
+      await getVeg();
+      closeModal();
+    } catch (error) {
+      const msg = error.response?.data?.message || "Something went wrong";
+      toast.error(msg);
+    }
+  };
+
+  const handleDeleteVeg = async (veg) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/v1/veg/delete/${veg._id}`);
+      toast.success("Vegetable deleted!");
+      document.getElementById(`delete_modal_${veg._id}`).close();
+      await getVeg();
+    } catch(error) {
+      const msg = error.response?.data?.message || "Something went wrong";
+      toast.error(msg);    }
+  };
 
   return (
-<div className="font-inter">
-  {isLoading ? (
-    <Loader />
-  ) : (
-    <Wrapper className="bg-[#FFFFFF] border border-[#E6E9EA] shadow-sm">
+    <div className="font-inter">
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Wrapper className="bg-white border border-[#E6E9EA] shadow-sm">
+          <div className="flex justify-between items-center mb-5">
+            <div>
+              <h1 className="text-2xl font-semibold text-[#12202E]">Vegetable List</h1>
+              <p className="text-sm text-[#94A3B8] mt-1">Manage all vegetables in the system.</p>
+            </div>
 
-      {/* Header */}
-      <div className="flex justify-between items-center mb-5">
-        <div>
-          <h1 className="text-2xl font-semibold text-[#12202E]">Vegetable List</h1>
-          <p className="text-sm font-extralight text-[#94A3B8] mt-1">
-            Manage and view all vegetables available in the system.
-          </p>
-        </div>
+            <button
+              onClick={() => {
+                setEditVeg(null);
+                setNewVeg({ marathiName: "", hinglishName: "", englishName: "" });
+                openModal();
+              }}
+              className="px-4 py-2 rounded-md bg-gray-700 text-white font-light shadow hover:bg-gray-800 transition"
+            >
+              + Add Vegetable
+            </button>
+          </div>
 
-        <button
-          onClick={openModal}
-          className="px-4 py-2 rounded-md  bg-gray-600 text-white font-light shadow hover:bg-gray-800 transition"
-        >
-          + Add New Vegetable
-        </button>
-      </div>
+          <Vegmodal
+            showForm={showForm}
+            newVeg={newVeg}
+            setNewVeg={setNewVeg}
+            handleAddVeg={handleAddVeg}
+            handleUpdateVeg={handleUpdateVeg}
+            isEdit={!!editVeg}
+          />
 
-      {/* Modal */}
-      <Vegmodal
-        showForm={showForm}
-        setShowForm={setShowForm}
-        newVegitables={newVegitables}
-        setNewVegitables={setNewVegitables}
-        handleAddVegitable={handleAddVegitable}
-      />
-
-      {/* Table */}
-      <div className="overflow-x-auto rounded-md">
-        <table className="min-w-full">
-          <thead className="bg-gray-200 text-[#12202E]">
-            <tr>
-              <th className="px-4 py-3 font-normal text-left">ID</th>
-              <th className="px-4 py-3 font-normal text-left">Marathi Name</th>
-              <th className="px-4 py-3 font-normal text-left">Hinglish Name</th>
-              <th className="px-4 py-3 font-normal text-left">English Name</th>
-              <th className="px-4 py-3 font-normal text-center">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {vegitables &&
-              vegitables.map((veg, id) => (
-                <tr
-                  key={id}
-                  className="hover:bg-gray-50 transition"
-                >
-                  <td className="px-4 py-3 font-light">{veg.id}</td>
-                  <td className="px-4 py-3 font-light">{veg.marathiName}</td>
-                  <td className="px-4 py-3 font-light">{veg.hinglishName}</td>
-                  <td className="px-4 py-3 font-light">{veg.englishName}</td>
-
-                  <td className="px-4 py-3 flex justify-center gap-3">
-                    <button
-                      className="px-3 py-1 rounded-md bg-[#17CF91] text-white font-light text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
-                    >
-                      Update
-                    </button>
-
-                    <button className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white font-light text-sm shadow hover:bg-[#E53E3E] transition cursor-pointer">
-                      Delete
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead className="bg-gray-200 text-[#12202E]">
+                <tr>
+                  <th className="px-4 py-3 text-left font-normal">Marathi</th>
+                  <th className="px-4 py-3 text-left font-normal">Hinglish</th>
+                  <th className="px-4 py-3 text-left font-normal">English</th>
+                  <th className="px-4 py-3 text-center font-normal">Actions</th>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-    </Wrapper>
-  )}
-</div>
+              </thead>
 
+              <tbody>
+                {vegs.map((veg) => (
+                  <tr key={veg._id} className="hover:bg-gray-50 transition">
+                    <td className="px-4 py-3">{veg.marathiName}</td>
+                    <td className="px-4 py-3">{veg.hinglishName}</td>
+                    <td className="px-4 py-3">{veg.englishName}</td>
+
+                    <td className="px-4 py-3 flex justify-center gap-3">
+                      <button
+                        onClick={() => handleOpenUpdate(veg)}
+                        className="px-3 py-1 rounded-md bg-[#17CF91] text-white text-sm shadow hover:bg-[#16C79A] transition"
+                      >
+                        Update
+                      </button>
+                  <button
+                    onClick={() => document.getElementById(`delete_modal_${veg._id}`).showModal()}
+                    className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
+                  >
+                    Delete
+                  </button>
+
+                  <dialog id={`delete_modal_${veg._id}`} className="modal">
+                    <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
+
+                      {/* Close Button */}
+                      <form method="dialog">
+                        <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
+                          ✕
+                        </button>
+                      </form>
+
+                      {/* Title */}
+                      <h3 className="text-lg font-semibold text-[#12202E]">Delete Veg?</h3>
+
+                      {/* Message */}
+                      <p className="py-4 text-sm text-gray-600">
+                        Are you sure you want to delete <span className="font-medium text-red-600">{veg.nameMarathi}</span>?  
+                        This action cannot be undone.
+                      </p>
+
+                      {/* Buttons */}
+                      <div className="flex justify-end gap-3 mt-4">
+                        <button
+                          onClick={() => handleDeleteVeg(veg)}
+                          className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium"
+                        >
+                          Yes, Delete
+                        </button>
+
+                        <form method="dialog">
+                          <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium">
+                            Cancel
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </dialog>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Wrapper>
+      )}
+    </div>
   );
 };
 
