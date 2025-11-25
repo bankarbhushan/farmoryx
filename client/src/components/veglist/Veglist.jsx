@@ -186,7 +186,7 @@ const Veglist = () => {
 
                       {/* Message */}
                       <p className="py-4 text-sm text-gray-600">
-                        Are you sure you want to delete <span className="font-medium text-red-600">{veg.nameMarathi}</span>?  
+                        Are you sure you want to delete <span className="font-medium text-red-600">{veg.marathiName}</span>?  
                         This action cannot be undone.
                       </p>
 

@@ -1,16 +1,16 @@
-// import express from "express";
-// import {
-//   createMerchant,
-//   deleteMerchant,
-//   getAllMerchants,
-//   updateMerchant,
-// } from "../controllers/merchant.controller.js";
+import express from "express";
+import { 
+  createMerchant,
+  feedMerchant,
+  updateMerchant,
+  deleteMerchant 
+} from "../controllers/merchant.controller.js";
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.post("/reg", createMerchant);
-// router.get("/merchantfeed", getAllMerchants);
-// router.delete("/deletemerchant/:id", deleteMerchant);
-// router.patch("/updatemerchant/:id", updateMerchant);
+router.post("/reg", createMerchant);              
+router.get("/feed", feedMerchant);             
+router.patch("/update/:id", updateMerchant);     
+router.delete("/delete/:id", deleteMerchant);     
 
-// export default router;
+export { router as merchantRouter };

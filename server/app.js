@@ -26,11 +26,13 @@ import  {adminRouter}  from "./src/routes/admin.route.js"
 import { billRouter } from "./src/routes/bill.route.js"
 import { farmerRouter } from "./src/routes/farmer.route.js"
 import { vegRouter } from "./src/routes/veg.route.js"
+import { merchantRouter } from "./src/routes/merchant.route.js"
 
 // Declering router 
 app.use("/api/v1/admin",adminRouter)
 app.use("/api/v1/bill",billRouter)
 app.use("/api/v1/farmer",farmerRouter)
+app.use("/api/v1/merchant",merchantRouter)
 app.use("/api/v1/veg",vegRouter)
 // https://localhost:8080/api/v1/admin/register
 // we are defining the api and version 1 it will call to teh adminrouter then 
