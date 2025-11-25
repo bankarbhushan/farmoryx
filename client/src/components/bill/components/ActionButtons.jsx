@@ -106,7 +106,7 @@ const handleSendWhatsApp = () => {
           <button
             type="button"
             onClick={handleSendWhatsApp}
-            className="bg-green-600 cursor-pointer w-full md:w-fit hover:bg-green-700 text-white px-4 py-2 rounded-md"
+            className="w-full  md:w-fit px-5 py-2 bg-[#16C79A] text-white font-normal rounded-md hover:bg-[#11D18C] hover:shadow-md transition duration-200 cursor-pointer"
           >
             WhatsApp ने पाठवा
           </button>
@@ -115,7 +115,7 @@ const handleSendWhatsApp = () => {
         <button
           type="button"
           onClick={handleSave}
-          className="bg-green-600 w-full md:w-fit hover:bg-green-700 text-white px-4 py-2 rounded-md"
+            className="w-full md:w-fit px-5 py-2 bg-[#16C79A] text-white font-normal rounded-md hover:bg-[#11D18C] hover:shadow-md transition duration-200 cursor-pointer"
         >
           Save Bill
         </button>

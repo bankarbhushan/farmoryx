@@ -1,7 +1,14 @@
 const MenuItem = ({ label, value, activeComponent, setActiveComponent }) => (
   <li
-    className={`cursor-pointer p-2 rounded transition 
-      ${activeComponent === value ? "bg-amber-500 text-gray-900" : "hover:bg-gray-700 text-white"}`}
+    className={`
+      cursor-pointer px-4 py-2 rounded-md font-semibold font-sans flex items-center gap-3
+      transition-all duration-200
+      ${
+        activeComponent === value
+          ? "text-[#17CF91] bg-[#17CF911A] "
+          : "text-gray-700 hover:bg-gray-200"
+      }
+    `}
     onClick={() => setActiveComponent(value)}
   >
     {label}
@@ -9,3 +16,5 @@ const MenuItem = ({ label, value, activeComponent, setActiveComponent }) => (
 );
 
 export default MenuItem;
+
+

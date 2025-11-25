@@ -142,7 +142,7 @@ const InfoForm = () => {
   return (
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-gray-200 shadow-md rounded-xl p-6 flex flex-col gap-6"
+        className="bg-white border shadow-sm border-gray-200 rounded-md p-6 flex flex-col gap-6"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Broker */}
@@ -321,7 +321,7 @@ const InfoForm = () => {
         <div className="flex justify-end mt-2">
           <button
             type="submit"
-            className="px-8 py-2.5 w-full md:w-fit bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 hover:shadow-md transition duration-200 cursor-pointer"
+            className="w-full md:w-fit px-5 py-2 bg-[#16C79A] text-white font-normal rounded-md hover:bg-[#11D18C] hover:shadow-md transition duration-200 cursor-pointer"
           >
             Add Details
           </button>
