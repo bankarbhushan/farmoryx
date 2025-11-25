@@ -122,9 +122,9 @@ const Bill = () => {
         <div className="flex items-center justify-end">
             <button
           onClick={handlePrint}
-          className="bg-amber-500 cursor-pointer w-full md:w-fit hover:bg-amber-600 text-white px-4 py-2 mt-6 mr-4 rounded-md transition-all"
+          className="bg-gray-500  cursor-pointer w-full md:w-fit hover:bg-gray-600 text-white px-4 py-2 mt-8 mr-4 rounded-md transition-all"
         >
-          🖨 प्रिंट बिल
+          Print Bill
         </button>
         <ActionButtons/>
         </div>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "./components/layout/sidebar/Sidebar";
 import Dashboard from "./components/dashboard/Dashboard";
 import Veglist from "./components/veglist/Veglist";
@@ -7,7 +7,7 @@ import MerchantList from "./components/merchantlist/Merchantlist";
 import Bill from "./components/bill/Bill";
 
 const Body = () => {
-  const [activeComponent, setActiveComponent] = useState("Bill");
+  const [activeComponent, setActiveComponent] = useState("Dashboard");
 
   const renderComponent = () => {
     switch (activeComponent) {
@@ -27,12 +27,17 @@ const Body = () => {
   };
 
   return (
-    <div className="flex w-full">
-      <div className="w-64 bg-gray-800 text-white p-4 hidden md:block">
-        <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
-      </div>
+    <div className="flex min-h-screen w-full bg-[#ffff]">
+      {/* Sidebar */}
+      <Sidebar
+        activeComponent={activeComponent}
+        setActiveComponent={setActiveComponent}
+      />
 
-      <div className="flex-1 bg-gray-100 p-6">{renderComponent()}</div>
+      {/* Main Content */}
+      <main className="ml-[280px]  p-6 w-full bg-[#F8FAF8] min-h-screen">
+        {renderComponent()}
+      </main>
     </div>
   );
 };

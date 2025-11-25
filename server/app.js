@@ -24,10 +24,12 @@ app.use(cookieParser())
 // Router inport 
 import  {adminRouter}  from "./src/routes/admin.route.js"
 import { billRouter } from "./src/routes/bill.route.js"
+import { farmerRouter } from "./src/routes/farmer.route.js"
 
 // Declering router 
 app.use("/api/v1/admin",adminRouter)
 app.use("/api/v1/bill",billRouter)
+app.use("/api/v1/farmer",farmerRouter)
 // https://localhost:8080/api/v1/admin/register
 // we are defining the api and version 1 it will call to teh adminrouter then 
 // this admin router will registerr admin method which is defined in the controller.

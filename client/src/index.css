@@ -1,4 +1,15 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Tailwind Base */
 @import "tailwindcss";
+
+/* DaisyUI Theme */
 @plugin "daisyui" {
   themes: light --default;
+}
+
+/* Apply Inter globally */
+body {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }

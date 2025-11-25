@@ -36,54 +36,89 @@ const MerchantList = () => {
   }, []);
 
   return (
-    <div>
-      {isLoading ? (
-            <Loader/>
-      ) : (
-        <Wrapper>
-          <h1 className="text-xl font-bold text-center mb-4 text-gray-800">
-             Farmer List
-          </h1>
+  <div className="font-inter">
+    {isLoading ? (
+      <Loader />
+    ) : (
+      <Wrapper className="bg-[#FFFFFF] border border-[#E6E9EA] shadow-sm">
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden">
-              <thead className="bg-cyan-600 text-white">
-                <tr>
-                  <th className="px-4 py-2 text-left">ID</th>
-                  <th className="px-4 py-2 text-left">Name</th>
-                  <th className="px-4 py-2 text-left">Villge</th>
-                  <th className="px-4 py-2 text-left">Mobile No</th>
-                  <th className="px-4 py-2 text-left">Business Name</th>
-                  <th className="px-4 py-2 text-center">Actions</th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-gray-200">
-                {
-                  merchants && merchants.map((marchant)=>
-                    <tr className="hover:bg-gray-50">
-                       <td className="px-4 py-2">{marchant.id}</td>
-                       <td className="px-4 py-2">{marchant.name}</td>
-                       <td className="px-4 py-2">{marchant.village}</td>
-                       <td className="px-4 py-2">{marchant.mobile}</td>
-                       <td className="px-4 py-2">{marchant.businessName}</td>
-                      <td className="px-4 py-2 flex justify-center gap-2">
-                        <button className="px-3 py-1 bg-yellow-700 text-white text-sm rounded hover:bg-yellow-600 cursor-pointer  transition">
-                          Update
-                        </button>
-                        <button className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition cursor-pointer">
-                          Delete
-                        </button>
-                     </td>
-                    </tr>
-                  )
-                }
-              </tbody>
-            </table>
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
+          <div>
+            <h1 className="text-2xl font-semibold text-[#12202E]">Merchant List</h1>
+            <p className="text-sm font-extralight text-[#94A3B8] mt-1">
+              View and manage all merchants associated with the network.
+            </p>
           </div>
-        </Wrapper>
-      )}
-    </div>
+
+          <button
+            // onClick={openModal}
+            className="px-4 py-2 rounded-md bg-gray-700 text-white font-light shadow hover:bg-gray-800 transition"
+          >
+            + Add New Merchant
+          </button>
+        </div>
+
+        {/* Modal */}
+        {/* <MerchantModal
+          showForm={showForm}
+          setShowForm={setShowForm}
+          newMerchant={newMerchant}
+          setNewMerchant={setNewMerchant}
+          handleAddMerchant={handleAddMerchant}
+        /> */}
+
+        {/* TABLE */}
+        <div className="overflow-x-auto rounded-md">
+          <table className="min-w-full">
+            <thead className="bg-gray-200 text-[#12202E]">
+              <tr>
+                <th className="px-4 py-3 font-normal text-left">ID</th>
+                <th className="px-4 py-3 font-normal text-left">Name</th>
+                <th className="px-4 py-3 font-normal text-left">Village</th>
+                <th className="px-4 py-3 font-normal text-left">Mobile</th>
+                <th className="px-4 py-3 font-normal text-left">Business Name</th>
+                <th className="px-4 py-3 font-normal text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {merchants?.map((merchant, index) => (
+                <tr
+                  key={index}
+                  className="hover:bg-gray-50 transition"
+                >
+                  <td className="px-4 py-3 font-light">{index + 1}</td>
+                  <td className="px-4 py-3 font-light">{merchant.name}</td>
+                  <td className="px-4 py-3 font-light">{merchant.village}</td>
+                  <td className="px-4 py-3 font-light">{merchant.mobile}</td>
+                  <td className="px-4 py-3 font-light">{merchant.businessName}</td>
+
+                  <td className="px-4 py-3 flex justify-center gap-3">
+                    <button
+                      // onClick={() => handleOpenUpdate(merchant)}
+                      className="px-3 py-1 rounded-md bg-[#17CF91] text-white text-sm shadow font-light hover:bg-[#16C79A] transition cursor-pointer"
+                    >
+                      Update
+                    </button>
+
+                    <button
+                      // onClick={() => handleDeleteMerchant(merchant._id)}
+                      className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+      </Wrapper>
+    )}
+  </div>
+
   );
 };
 

@@ -58,8 +58,7 @@ const VegForm = () => {
   };
 
   return (
-    <div className="bg-white border mt-4 mb-4 border-gray-200 shadow-md rounded-xl p-6">
-      <h3 className="mb-2 text-emerald-600 font-semibold">Add Veg</h3>
+    <div className="bg-white border shadow-sm border-gray-200 rounded-md p-6 flex flex-col gap-6">
 
       <form onSubmit={handleAddProduct} className="flex flex-col items-end">
         <div className="flex flex-col md:flex-row gap-3 w-full relative">
@@ -119,7 +118,7 @@ const VegForm = () => {
 
         <button
           type="submit"
-          className="mt-2.5 w-full md:w-fit px-5 py-2 cursor-pointer rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+            className="w-full mt-5 md:w-fit px-5 py-2 bg-[#16C79A] text-white font-normal rounded-md hover:bg-[#11D18C] hover:shadow-md transition duration-200 cursor-pointer"
         >
           Add Product
         </button>
