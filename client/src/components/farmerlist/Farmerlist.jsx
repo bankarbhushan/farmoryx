@@ -12,15 +12,6 @@ const FarmerList = () => {
   const [showForm, setShowForm] = useState(false);
   const [editFarmer, setEditFarmer] = useState(null);
 
-  const handleOpenUpdate = (farmer) => {
-    setEditFarmer(farmer);
-    setNewFarmer({
-      name: farmer.name,
-      village: farmer.village,
-      mobile: farmer.mobile,
-    });
-    openModal();
-  };
 
   const getFarmer = async () => {
     try {
@@ -38,14 +29,15 @@ const FarmerList = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);   
-      await getFarmer();    
-      setIsLoading(false);  
-    };
-    fetchData();
-  }, []);
+  const handleOpenUpdate = (farmer) => {
+    setEditFarmer(farmer);
+    setNewFarmer({
+      name: farmer.name,
+      village: farmer.village,
+      mobile: farmer.mobile,
+    });
+    openModal();
+  };
 
   const handleAddFarmer = async () => {
     try {
@@ -62,16 +54,6 @@ const FarmerList = () => {
       const msg = error.response?.data?.message || "Something went wrong";
       toast.error(msg);
     }
-  };
-
-  const openModal = () => {
-    setShowForm(true);
-    document.getElementById("my_modal_3").showModal();
-  };
-
-  const closeModal = () => {
-    setShowForm(false);
-    document.getElementById("my_modal_3").close();
   };
 
   const handleUpdateFarmer = async () => {
@@ -92,6 +74,39 @@ const FarmerList = () => {
       toast.error(msg);
     }
   };
+
+  const handleDeleteFarmer = async (farmer) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/api/v1/farmer/delete/${farmer._id}`
+      );
+
+      toast.success(res.data.message);
+     document.getElementById(`delete_modal_${farmer._id}`).close();
+      await getFarmer();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Delete failed");
+    }
+  };
+
+  const openModal = () => {
+    setShowForm(true);
+    document.getElementById("my_modal_3").showModal();
+  };
+
+  const closeModal = () => {
+    setShowForm(false);
+    document.getElementById("my_modal_3").close();
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);   
+      await getFarmer();    
+      setIsLoading(false);  
+    };
+    fetchData();
+  }, []);
 
   return (
   <div className="font-inter">
@@ -163,10 +178,50 @@ const FarmerList = () => {
                     >
                       Update
                     </button>
+                  <button
+                    onClick={() => document.getElementById(`delete_modal_${farmer._id}`).showModal()}
+                    className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
+                  >
+                    Delete
+                  </button>
 
-                    <button className="px-3 py-1 rounded-md bg-[#FF6B6B] font-light  text-white text-sm shadow hover:bg-[#E53E3E] transition cursor-pointer">
-                      Delete
-                    </button>
+                  <dialog id={`delete_modal_${farmer._id}`} className="modal">
+                    <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
+
+                      {/* Close Button */}
+                      <form method="dialog">
+                        <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
+                          ✕
+                        </button>
+                      </form>
+
+                      {/* Title */}
+                      <h3 className="text-lg font-semibold text-[#12202E]">Delete Farmer?</h3>
+
+                      {/* Message */}
+                      <p className="py-4 text-sm text-gray-600">
+                        Are you sure you want to delete <span className="font-medium text-red-600">{farmer.name}</span>?  
+                        This action cannot be undone.
+                      </p>
+
+                      {/* Buttons */}
+                      <div className="flex justify-end gap-3 mt-4">
+                        <button
+                          onClick={() => handleDeleteFarmer(farmer)}
+                          className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium"
+                        >
+                          Yes, Delete
+                        </button>
+
+                        <form method="dialog">
+                          <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium">
+                            Cancel
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </dialog>
+
                   </td>
                 </tr>
               ))}
