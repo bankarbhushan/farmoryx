@@ -1,97 +1,143 @@
-// import mongoose from "mongoose";
-// import merchantModel from "../models/merchant.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { Merchant } from "../models/merchant.model.js";
 
-// // Create Merchant
-// export const createMerchant = async (req, res) => {
-//   try {
-//     const { name, phone, shopName, address } = req.body;
+// CREATE MERCHANT
+export const createMerchant = asyncHandler(async (req, res) => {
+  try {
+    const { name, mobile, village, businessName } = req.body;
 
-//     const existing = await merchantModel.findOne({ name });
-//     if (existing) {
-//       return res.status(400).json({ message: "name already registered." });
-//     }
+    if (!name || !mobile || !village || !businessName) {
+      throw new ApiError(400, "All fields are required.");
+    }
 
-//     const newMerchant = await merchantModel.create({
-//       name,
-//       phone,
-//       address,
-//       shopName,
-//     });
+    const exists = await Merchant.findOne({ mobile });
+    if (exists) {
+      throw new ApiError(409, "Merchant already exists.");
+    }
 
-//     res.status(201).json({
-//       message: `Merchant ${newMerchant.name} created successfully.`,
-//       data: newMerchant,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
+    const merchant = await Merchant.create({
+      name,
+      mobile,
+      village,
+      businessName,
+    });
 
-// // Get All Merchants
-// export const getAllMerchants = async (req, res) => {
-//   try {
-//     const merchants = await merchantModel.find();
+    return res
+      .status(201)
+      .json(new ApiResponse(201, merchant, "Merchant created successfully."));
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const validationMessage = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
 
-//     if (merchants.length === 0) {
-//       return res.status(404).json({ message: "No merchants found." });
-//     }
+      return res.status(400).json({
+        success: false,
+        message: validationMessage,
+      });
+    }
 
-//     res.status(200).json({ data: merchants });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ message: "Unable to fetch merchants", error: error.message });
-//   }
-// };
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || "Something went wrong.",
+    });
+  }
+});
 
-// // Update Merchant
-// export const updateMerchant = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { name, phone, shopName, address, role } = req.body;
+// FEED MERCHANT
+export const feedMerchant = asyncHandler(async (req, res) => {
+  try {
+    const merchants = await Merchant.find();
 
-//     if (role) {
-//       return res.status(403).json({ message: "Email or role update not all" });
-//     }
+    if (!merchants.length) {
+      throw new ApiError(404, "No merchants found.");
+    }
 
-//     if (!mongoose.Types.ObjectId.isValid(id)) {
-//       return res.status(400).json({ message: "Invalid Merchant ID" });
-//     }
+    return res
+      .status(200)
+      .json(new ApiResponse(200, merchants, "All merchants fetched successfully."));
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const validationMessage = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+      return res.status(400).json({ success: false, message: validationMessage });
+    }
 
-//     const merchant = await merchantModel.findById(id);
-//     if (!merchant) {
-//       return res.status(404).json({ message: "Merchant not found." });
-//     }
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || "Something went wrong.",
+    });
+  }
+});
 
-//     if (name) merchant.name = name;
-//     if (phone) merchant.phone = phone;
-//     if (shopName) merchant.shopName = shopName;
-//     if (address) merchant.address = address;
+// UPDATE MERCHANT
+export const updateMerchant = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, mobile, village, businessName } = req.body;
 
-//     await merchant.save();
+    if (!name || !mobile || !village || !businessName) {
+      throw new ApiError(400, "All fields are required.");
+    }
 
-//     res.status(200).json({
-//       message: "Merchant updated successfully.",
-//       data: merchant,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
+    const merchant = await Merchant.findById(id);
+    if (!merchant) {
+      throw new ApiError(404, "Merchant not found.");
+    }
 
-// // Delete Merchant
-// export const deleteMerchant = async (req, res) => {
-//   try {
-//     const { id } = req.params;
+    const updated = await Merchant.findByIdAndUpdate(
+      id,
+      { name, mobile, village, businessName },
+      { new: true }
+    );
 
-//     const merchant = await merchantModel.findByIdAndDelete(id);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, updated, "Merchant updated successfully."));
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const validationMessage = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+      return res.status(400).json({ success: false, message: validationMessage });
+    }
 
-//     if (!merchant) {
-//       return res.status(404).json({ message: "Merchant not found" });
-//     }
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || "Something went wrong.",
+    });
+  }
+});
 
-//     res.status(200).json({ message: `${merchant.name} deleted successfully` });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
+// DELETE MERCHANT
+export const deleteMerchant = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const merchant = await Merchant.findById(id);
+    if (!merchant) {
+      throw new ApiError(404, "Merchant not found.");
+    }
+
+    const deletedMerchant = await Merchant.findByIdAndDelete(id);
+
+    return res.status(200).json(
+      new ApiResponse(200, deletedMerchant, "Merchant deleted successfully.")
+    );
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const validationMessage = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+      return res.status(400).json({ success: false, message: validationMessage });
+    }
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || "Something went wrong.",
+    });
+  }
+});
