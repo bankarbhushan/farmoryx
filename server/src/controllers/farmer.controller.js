@@ -1,95 +1,90 @@
-// import mongoose from "mongoose";
-// import farmerModel from "../models/farmer.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { Farmer } from "../models/farmer.model.js";
 
-// // Create Farmer
-// export const createFarmer = async (req, res) => {
-//   try {
-//     const { name, phone, address } = req.body;
 
-//     const existing = await farmerModel.findOne({ name });
+// CREATE FARMER
+const createfarmer = asyncHandler(async (req, res) => {
+  const { name, mobile, village } = req.body;
 
-//     if (existing) {
-//       return res.status(400).json({ message: `${name} already registered.` });
-//     }
+  try {
+    if (!name || !mobile || !village) {
+      throw new ApiError(400, "All fields are required.");
+    }
 
-//     const newFarmer = await farmerModel.create({ name, phone, address });
+    let isExistingFarmer = await Farmer.findOne({ mobile });
+    if (isExistingFarmer) {
+      throw new ApiError(409, "This farmer already exists.");
+    }
 
-//     res.status(201).json({
-//       message: `Farmer ${newFarmer.name} created successfully.`,
-//       data: newFarmer,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
+    const farmer = await Farmer.create({ name, mobile, village });
 
-// // Get All Farmers
-// export const getAllFarmer = async (req, res) => {
-//   try {
-//     const feed = await farmerModel.find();
+    return res
+      .status(201)
+      .json(new ApiResponse(201, farmer, "Farmer created successfully."));
+  } catch (error) {
+    //  HANDLE MONGOOSE VALIDATION ERRORS
+    if (error.name === "ValidationError") {
+      const validationMessage = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
 
-//     if (feed.length > 0) {
-//       return res.status(200).json({ data: feed });
-//     } else {
-//       return res.status(404).json({ message: `No farmers found.` });
-//     }
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({ message: `Unable to fetch farmers`, error: error.message });
-//   }
-// };
+      return res.status(400).json({
+        success: false,
+        message: validationMessage,
+      });
+    }
 
-// // Update Farmer
-// export const updateFarmer = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { name, phone, address } = req.body;
+    // OTHER ERRORS
+    return res
+      .status(error.statusCode || 500)
+      .json({
+        success: false,
+        message: error.message || "Something went wrong.",
+      });
+  }
+});
 
-//     if (!mongoose.Types.ObjectId.isValid(id)) {
-//       return res.status(400).json({ message: `Invalid Farmer ID` });
-//     }
 
-//     const foundFarmer = await farmerModel.findById(id);
 
-//     if (!foundFarmer) {
-//       return res.status(404).json({ message: `Farmer not found.` });
-//     }
+// GET ALL FARMERS
+const feedfarmer = asyncHandler(async (req, res) => {
+  const farmers = await Farmer.find();
 
-//     if (name) foundFarmer.name = name;
-//     if (phone) foundFarmer.phone = phone;
-//     if (address) foundFarmer.address = address;
+  if (!farmers.length) {
+    throw new ApiError(404, "No farmers found.");
+  }
 
-//     await foundFarmer.save();
+  return res.status(200).json(
+    new ApiResponse(200, farmers, "All farmers fetched successfully.")
+  );
+});
 
-//     res.status(200).json({
-//       message: `Farmer updated successfully.`,
-//       data: foundFarmer,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Server error",
-//       error: error.message,
-//     });
-//   }
-// };
 
-// // Delete Farmer
-// export const deleteFarmer = async (req, res) => {
-//   try {
-//     const { id } = req.params;
+// UPDATE FARMER
+const updatefarmer = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { name, village, mobile } = req.body;
 
-//     const farmer = await farmerModel.findById(id);
-//     if (!farmer) {
-//       return res.status(404).json({ message: `Farmer not found` });
-//     }
+  if (!name || !mobile || !village) {
+    throw new ApiError(400, "All fields are required.");
+  }
 
-//     await farmerModel.findByIdAndDelete(id);
+  const farmer = await Farmer.findById(id);
+  if (!farmer) {
+    throw new ApiError(404, "Farmer not found.");
+  }
 
-//     res
-//       .status(200)
-//       .json({ message: `Farmer ${farmer.name} deleted successfully` });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
+  const updated = await Farmer.findByIdAndUpdate(
+    id,
+    { name, village, mobile },
+    { new: true }
+  );
+
+  return res.status(200).json(
+    new ApiResponse(200, updated, "Farmer updated successfully.")
+  );
+});
+
+export { createfarmer, feedfarmer, updatefarmer };

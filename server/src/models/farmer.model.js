@@ -1,53 +1,37 @@
-// import mongoose,{Schema} from "mongoose";
-// import validator from "validator";
+import mongoose,{Schema} from "mongoose";
+import validator from "validator";
 
-// const farmerSchema = new Schema(
-//   {
-//     name: {
-//       type: String,
-//       required: [true, "Farmer name is required."],
-//       trim: true,
-//       minlength: 3,
-//       lowercase: true,
-//       minLength: [2, "Name Shloud be greater then 2 charecter."],
-//       maxLength: [100, "You reach the name limit."],
-//       index:true
-//     },
+const farmerSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      minlength: 2,
+      maxlength: 100,
+    },
 
-//     phone: {
-//       type: String,
-//       required: [true, "Phone number is required."],
-//       validate: {
-//         validator: (value) => validator.isMobilePhone(value, "en-IN"),
-//         message: "Invalid mobile number.",
-//       },
-//     },
+    mobile: {
+      type: String,
+      required: true,
+      validate: {
+        validator: (value) => validator.isMobilePhone(value, "en-IN"),
+        message: "Invalid mobile number.",
+      },
+    },
 
-//     address: {
-//       village: String,
-//       taluka: String,
-//       district: String,
-//       state: String,
-//       pincode: String,
-//     },
+    village: {
+      type: String,
+      required: true
+    },
 
-//     totalSuppliedAmount: {
-//       type: Number,
-//       default: 0,
-//     },
+    totalSuppliedAmount: { type: Number, default: 0 },
+    totalPaymentPending: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: true }
+  },
+  { timestamps: true }
+);
 
-//     totalPaymentPending: {
-//       type: Number,
-//       default: 0,
-//     },
-
-//     isActive: {
-//       type: Boolean,
-//       default: true,
-//     },
-//   },
-//   { timestamps: true }
-// );
-
-// export const Farmer = mongoose.model("Farmer", farmerSchema);
+export const Farmer = mongoose.model("Farmer", farmerSchema);
 
