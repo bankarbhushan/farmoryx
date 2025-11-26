@@ -1,45 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "./components/layout/sidebar/Sidebar";
-import Dashboard from "./components/dashboard/Dashboard";
-import Veglist from "./components/veglist/Veglist";
-import FarmerList from "./components/farmerlist/Farmerlist";
-import MerchantList from "./components/merchantlist/Merchantlist";
-import Bill from "./components/bill/Bill";
-import BillList from "./components/bill/BillList";
+import { Outlet } from "react-router-dom";
 
 const Body = () => {
-  const [activeComponent, setActiveComponent] = useState("Dashboard");
-
-  const renderComponent = () => {
-    switch (activeComponent) {
-      case "Dashboard":
-        return <Dashboard />;
-      case "Bill":
-        return <Bill />;
-      case "VegList":
-        return <Veglist />;
-      case "FarmerList":
-        return <FarmerList />;
-      case "MerchantList":
-        return <MerchantList />;
-      case "BillList":
-        return <BillList />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
     <div className="flex min-h-screen w-full bg-[#ffff]">
-      {/* Sidebar */}
-      <Sidebar
-        activeComponent={activeComponent}
-        setActiveComponent={setActiveComponent}
-      />
+      <Sidebar />
 
-      {/* Main Content */}
-      <main className="ml-[280px]  p-6 w-full bg-[#F8FAF8] min-h-screen">
-        {renderComponent()}
+      <main className="ml-[280px] p-6 w-full bg-[#F8FAF8] min-h-screen">
+        <Outlet />
       </main>
     </div>
   );

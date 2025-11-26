@@ -143,8 +143,40 @@ const deleteBill = asyncHandler(async(req,res)=>{
   
 })
 
+const SingleBill = asyncHandler(async(req,res)=>{
+  try {
+    const {id} = req.params;
+
+    const existingBill = await Bill.findById(id);
+
+    if(!existingBill){
+      throw new ApiError(404,"Bill not Found.")
+    }
+
+    return res.status(200).json(
+      new ApiResponse(200,existingBill,"Sigle bill data fetach Successfully.")
+    );
+  } catch (error) {
+     if (error.name === "ValidationError") {
+      const validationMessage = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+
+      return res.status(400).json({
+        success: false,
+        message: validationMessage,
+      });
+    }
+    return res
+    .status(error.statusCode || 500)
+    .json({
+      success: false,
+      message: error.message || "Something went wrong.",
+    });
+  }
+  
+})
 
 
-
-export { createBill ,feedbill,deleteBill};
+export { createBill ,feedbill,deleteBill,SingleBill};
 
