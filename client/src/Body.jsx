@@ -5,6 +5,7 @@ import Veglist from "./components/veglist/Veglist";
 import FarmerList from "./components/farmerlist/Farmerlist";
 import MerchantList from "./components/merchantlist/Merchantlist";
 import Bill from "./components/bill/Bill";
+import BillList from "./components/bill/BillList";
 
 const Body = () => {
   const [activeComponent, setActiveComponent] = useState("Dashboard");
@@ -21,6 +22,8 @@ const Body = () => {
         return <FarmerList />;
       case "MerchantList":
         return <MerchantList />;
+      case "BillList":
+        return <BillList />;
       default:
         return <Dashboard />;
     }

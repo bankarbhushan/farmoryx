@@ -4,6 +4,7 @@ import Loader from "../constants/Loader";
 import FarmerModal from "./FarmerModal";
 import toast from "react-hot-toast";
 import axios from "axios";
+import NoDataCard from "../constants/NoDataCard";
 
 const FarmerList = () => {
   const [farmers, setFarmers] = useState([]);
@@ -145,89 +146,94 @@ const FarmerList = () => {
           isEdit={!!editFarmer}
         />
 
-        {/* Farmer Table */}
-        <div className="overflow-x-auto rounded-md">
-          <table className="min-w-full">
-            <thead className="bg-gray-200 text-[#12202E]">
-              <tr>
-                <th className="px-4 py-3 font-normal text-left">ID</th>
-                <th className="px-4 py-3 font-normal text-left">Name</th>
-                <th className="px-4 py-3 font-normal text-left">Village</th>
-                <th className="px-4 py-3 font-normal text-left">Mobile No</th>
-                <th className="px-4 py-3 font-normal text-center">Actions</th>
-              </tr>
-            </thead>
+        {
+          farmers.length === 0 ? <NoDataCard message="Famers"/> :
+          (
+            <div className="overflow-x-auto rounded-md">
+              <table className="min-w-full">
+                <thead className="bg-gray-200 text-[#12202E]">
+                  <tr>
+                    <th className="px-4 py-3 font-normal text-left">ID</th>
+                    <th className="px-4 py-3 font-normal text-left">Name</th>
+                    <th className="px-4 py-3 font-normal text-left">Village</th>
+                    <th className="px-4 py-3 font-normal text-left">Mobile No</th>
+                    <th className="px-4 py-3 font-normal text-center">Actions</th>
+                  </tr>
+                </thead>
 
-            <tbody>
-              {farmers.map((farmer, index) => (
-                <tr
-                  key={index}
-                  className={`
-                    hover:bg-gray-50 transition
-                  `}
-                >
-                  <td className="px-4 font-light py-3">{index + 1}</td>
-                  <td className="px-4 font-light  py-3">{farmer.name}</td>
-                  <td className="px-4 font-light  py-3">{farmer.village}</td>
-                  <td className="px-4 font-light  py-3">{farmer.mobile}</td>
-
-                  <td className="px-4 py-3 flex justify-center gap-3">
-                    <button
-                      onClick={() => handleOpenUpdate(farmer)}
-                      className="px-3 py-1 rounded-md bg-[#17CF91] font-light  text-white text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
+                <tbody>
+                  {farmers.map((farmer, index) => (
+                    <tr
+                      key={index}
+                      className={`
+                        hover:bg-gray-50 transition
+                      `}
                     >
-                      Update
-                    </button>
-                  <button
-                    onClick={() => document.getElementById(`delete_modal_${farmer._id}`).showModal()}
-                    className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
-                  >
-                    Delete
-                  </button>
+                      <td className="px-4 font-light py-3">{index + 1}</td>
+                      <td className="px-4 font-light  py-3">{farmer.name}</td>
+                      <td className="px-4 font-light  py-3">{farmer.village}</td>
+                      <td className="px-4 font-light  py-3">{farmer.mobile}</td>
 
-                  <dialog id={`delete_modal_${farmer._id}`} className="modal">
-                    <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
-
-                      {/* Close Button */}
-                      <form method="dialog">
-                        <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
-                          ✕
-                        </button>
-                      </form>
-
-                      {/* Title */}
-                      <h3 className="text-lg font-semibold text-[#12202E]">Delete Farmer?</h3>
-
-                      {/* Message */}
-                      <p className="py-4 text-sm text-gray-600">
-                        Are you sure you want to delete <span className="font-medium text-red-600">{farmer.name}</span>?  
-                        This action cannot be undone.
-                      </p>
-
-                      {/* Buttons */}
-                      <div className="flex justify-end gap-3 mt-4">
+                      <td className="px-4 py-3 flex justify-center gap-3">
                         <button
-                          onClick={() => handleDeleteFarmer(farmer)}
-                          className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium cursor-pointer"
+                          onClick={() => handleOpenUpdate(farmer)}
+                          className="px-3 py-1 rounded-md bg-[#17CF91] font-light  text-white text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
                         >
-                          Yes, Delete
+                          Update
                         </button>
+                      <button
+                        onClick={() => document.getElementById(`delete_modal_${farmer._id}`).showModal()}
+                        className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
+                      >
+                        Delete
+                      </button>
 
-                        <form method="dialog">
-                          <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium cursor-pointer">
-                            Cancel
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </dialog>
+                      <dialog id={`delete_modal_${farmer._id}`} className="modal">
+                        <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
 
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                          {/* Close Button */}
+                          <form method="dialog">
+                            <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
+                              ✕
+                            </button>
+                          </form>
+
+                          {/* Title */}
+                          <h3 className="text-lg font-semibold text-[#12202E]">Delete Farmer?</h3>
+
+                          {/* Message */}
+                          <p className="py-4 text-sm text-gray-600">
+                            Are you sure you want to delete <span className="font-medium text-red-600">{farmer.name}</span>?  
+                            This action cannot be undone.
+                          </p>
+
+                          {/* Buttons */}
+                          <div className="flex justify-end gap-3 mt-4">
+                            <button
+                              onClick={() => handleDeleteFarmer(farmer)}
+                              className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium cursor-pointer"
+                            >
+                              Yes, Delete
+                            </button>
+
+                            <form method="dialog">
+                              <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium cursor-pointer">
+                                Cancel
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                      </dialog>
+
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
+        }
+
 
       </Wrapper>
     )}

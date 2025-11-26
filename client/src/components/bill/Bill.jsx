@@ -15,7 +15,7 @@ const Bill = () => {
           <h1 className="text-2xl font-semibold text-[#12202E]">
             Billing
           </h1>
-          <p className="text-sm text-gray-500 font-light">
+          <p className="text-sm font-extralight text-[#94A3B8] mt-1">
             Create and manage bills for farmers & merchants.
           </p>
         </div>

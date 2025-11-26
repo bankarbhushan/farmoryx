@@ -19,6 +19,7 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
           <MenuItem label="Veg List" value="VegList" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
           <MenuItem label="Farmer List" value="FarmerList" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
           <MenuItem label="Merchant List" value="MerchantList" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
+          <MenuItem label="Bill List" value="BillList" activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
         </ul>
       </nav>
     </aside>

@@ -4,6 +4,7 @@ import Loader from "../constants/Loader";
 import Vegmodal from "./Vegmodal";
 import axios from "axios";
 import toast from "react-hot-toast";
+import NoDataCard from "../constants/NoDataCard";
 
 const Veglist = () => {
   const [vegs, setVegs] = useState([]);
@@ -139,80 +140,87 @@ const Veglist = () => {
             isEdit={!!editVeg}
           />
 
-          <div className="overflow-x-auto rounded-md">
-            <table className="min-w-full">
-              <thead className="bg-gray-200 text-[#12202E]">
-                <tr>
-                  <th className="px-4 py-3 text-left font-normal">Marathi</th>
-                  <th className="px-4 py-3 text-left font-normal">Hinglish</th>
-                  <th className="px-4 py-3 text-left font-normal">English</th>
-                  <th className="px-4 py-3 text-center font-normal">Actions</th>
-                </tr>
-              </thead>
+          {
+            vegs.length===0 ? <NoDataCard message="Vegetables"/>
+            :
+            (
+              <div className="overflow-x-auto rounded-md">
+                <table className="min-w-full">
+                  <thead className="bg-gray-200 text-[#12202E]">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-normal">Marathi</th>
+                      <th className="px-4 py-3 text-left font-normal">Hinglish</th>
+                      <th className="px-4 py-3 text-left font-normal">English</th>
+                      <th className="px-4 py-3 text-center font-normal">Actions</th>
+                    </tr>
+                  </thead>
 
-              <tbody>
-                {vegs.map((veg) => (
-                  <tr key={veg._id} className="hover:bg-gray-50 transition">
-                    <td className="px-4 font-light py-3">{veg.marathiName}</td>
-                    <td className="px-4 font-light py-3">{veg.hinglishName}</td>
-                    <td className="px-4 font-light py-3">{veg.englishName}</td>
+                  <tbody>
+                    {vegs.map((veg) => (
+                      <tr key={veg._id} className="hover:bg-gray-50 transition">
+                        <td className="px-4 font-light py-3">{veg.marathiName}</td>
+                        <td className="px-4 font-light py-3">{veg.hinglishName}</td>
+                        <td className="px-4 font-light py-3">{veg.englishName}</td>
 
-                    <td className="px-4 py-3 flex justify-center gap-3">
-                      <button
-                        onClick={() => handleOpenUpdate(veg)}
-                        className="px-3 py-1 rounded-md bg-[#17CF91] text-white text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
-                      >
-                        Update
-                      </button>
-                  <button
-                    onClick={() => document.getElementById(`delete_modal_${veg._id}`).showModal()}
-                    className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
-                  >
-                    Delete
-                  </button>
-
-                  <dialog id={`delete_modal_${veg._id}`} className="modal">
-                    <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
-
-                      {/* Close Button */}
-                      <form method="dialog">
-                        <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
-                          ✕
-                        </button>
-                      </form>
-
-                      {/* Title */}
-                      <h3 className="text-lg font-semibold text-[#12202E]">Delete Veg?</h3>
-
-                      {/* Message */}
-                      <p className="py-4 text-sm text-gray-600">
-                        Are you sure you want to delete <span className="font-medium text-red-600">{veg.marathiName}</span>?  
-                        This action cannot be undone.
-                      </p>
-
-                      {/* Buttons */}
-                      <div className="flex justify-end gap-3 mt-4">
-                        <button
-                          onClick={() => handleDeleteVeg(veg)}
-                          className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium cursor-pointer"
-                        >
-                          Yes, Delete
-                        </button>
-
-                        <form method="dialog">
-                          <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium cursor-pointer">
-                            Cancel
+                        <td className="px-4 py-3 flex justify-center gap-3">
+                          <button
+                            onClick={() => handleOpenUpdate(veg)}
+                            className="px-3 py-1 rounded-md bg-[#17CF91] text-white text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
+                          >
+                            Update
                           </button>
-                        </form>
-                      </div>
-                    </div>
-                  </dialog>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      <button
+                        onClick={() => document.getElementById(`delete_modal_${veg._id}`).showModal()}
+                        className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
+                      >
+                        Delete
+                      </button>
+
+                      <dialog id={`delete_modal_${veg._id}`} className="modal">
+                        <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
+
+                          {/* Close Button */}
+                          <form method="dialog">
+                            <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
+                              ✕
+                            </button>
+                          </form>
+
+                          {/* Title */}
+                          <h3 className="text-lg font-semibold text-[#12202E]">Delete Veg?</h3>
+
+                          {/* Message */}
+                          <p className="py-4 text-sm text-gray-600">
+                            Are you sure you want to delete <span className="font-medium text-red-600">{veg.marathiName}</span>?  
+                            This action cannot be undone.
+                          </p>
+
+                          {/* Buttons */}
+                          <div className="flex justify-end gap-3 mt-4">
+                            <button
+                              onClick={() => handleDeleteVeg(veg)}
+                              className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium cursor-pointer"
+                            >
+                              Yes, Delete
+                            </button>
+
+                            <form method="dialog">
+                              <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium cursor-pointer">
+                                Cancel
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                      </dialog>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          }
+
         </Wrapper>
       )}
     </div>

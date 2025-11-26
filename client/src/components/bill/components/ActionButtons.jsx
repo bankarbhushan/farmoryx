@@ -50,7 +50,7 @@ const ActionButtons = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/bill/createbill",
+        "http://localhost:3000/api/v1/bill/create",
         { bill: payload }
       );
       console.log("Bill saved:", res.data);
