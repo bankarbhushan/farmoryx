@@ -25,7 +25,7 @@ const MerchantList = () => {
     try {
       const res = await axios.get("http://localhost:3000/api/v1/merchant/feed");
 
-      if (Array.isArray(res.data.data)) {
+      if ((res.data.data)) {
         setMerchants(res.data.data);
       } else {
         setMerchants([]);

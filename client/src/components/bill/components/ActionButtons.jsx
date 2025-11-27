@@ -12,14 +12,25 @@ const ActionButtons = () => {
   const [loading, setLoading] = useState(false);
 
 
-  const totalAmount = products.reduce((acc, p) => {
-    return acc + Number(p.weight) * Number(p.rate);
-  }, 0);
-  const commissionAmount = userType === "farmer" ? (totalAmount * 8) / 100 : 0;
-  const pattiCharges = Number(generalInfo.pattiCharges || 0);
-  const advancePaid = Number(generalInfo.advancePaid || 0);
-  const externalVegCost = Number(generalInfo.externalVegCost || 0);
-  const netTotal = Number(totalAmount - (commissionAmount + pattiCharges + advancePaid + externalVegCost));
+const totalAmount = products.reduce((acc, p) => {
+  return acc + Number(p.weight) * Number(p.rate);
+}, 0);
+
+const totalAmountFixed = Number(totalAmount.toFixed(0));
+
+const commissionAmount = userType === "farmer"
+  ? Number(((totalAmountFixed * 8) / 100).toFixed(0))
+  : 0;
+
+const pattiCharges = Number((generalInfo.pattiCharges || 0));
+const advancePaid = Number((generalInfo.advancePaid || 0));
+const externalVegCost = Number((generalInfo.externalVegCost || 0));
+
+const netTotal = Number(
+  (totalAmountFixed -
+    (commissionAmount + pattiCharges + advancePaid + externalVegCost)
+  ).toFixed(0)
+);
 
 
   // Function to handle SAVE button
