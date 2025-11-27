@@ -1,20 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { useBill } from "../context/BillContext";
 import toast from "react-hot-toast";
+import axios from "axios";
+import Loader from "../../constants/Loader";
 
 const VegForm = () => {
-  const vegitables = [
-    { id: 1, marathiName: "वांगे", hinglishName: "Vangi", englishName: "Brinjal" },
-    { id: 2, marathiName: "टोमॅटो", hinglishName: "Tamatar", englishName: "Tomato" },
-    { id: 3, marathiName: "बटाटा", hinglishName: "Batata", englishName: "Potato" },
-    { id: 4, marathiName: "कांदा", hinglishName: "Kanda", englishName: "Onion" },
-    { id: 5, marathiName: "भेंडी", hinglishName: "Bhendi", englishName: "Lady Finger (Okra)" },
-    { id: 6, marathiName: "दोडका", hinglishName: "Doodka", englishName: "Ridge Gourd" },
-    { id: 7, marathiName: "तोंडली", hinglishName: "Tondali", englishName: "Ivy Gourd" },
-    { id: 8, marathiName: "कोबी", hinglishName: "Kobi", englishName: "Cabbage" },
-    { id: 9, marathiName: "फुलकोबी", hinglishName: "Phulkobi", englishName: "Cauliflower" },
-    { id: 10, marathiName: "पालक", hinglishName: "Palak", englishName: "Spinach" }
-  ];
+
+  const [vegitables, setvegitables] = useState([]);
+  
+  const [isLoading,setIsLoading] = useState(false)
+  
+  const getVeg = async () => {
+    try {
+      setIsLoading(true)
+      const res = await axios.get("http://localhost:3000/api/v1/veg/feed");
+      if(res.data.data){
+      setvegitables(res.data.data);
+      setIsLoading(false)
+      }else {
+      setvegitables([]);
+      }
+
+    } catch (error) {
+      const msg = error.response?.data?.message || "Something went wrong";
+      toast.error(msg);    
+      setvegitables([]);
+    }
+  }; 
+
+  useEffect(() => {
+    (async () => {
+      await getVeg();
+    })();
+  }, []);
 
   const { addProduct, formData, setFormData } = useBill();
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -52,78 +70,92 @@ const VegForm = () => {
       veg.englishName.toLowerCase().includes(formData.productName.toLowerCase())
   );
 
-  const handleSelectVeg = (vegName) => {
+  const handleSelectVeg = (vegName ) => {
     setFormData((prev) => ({ ...prev, productName: vegName }));
     setShowSuggestions(false);
   };
 
   return (
-    <div className="bg-white border shadow-sm border-gray-200 rounded-md p-6 flex flex-col gap-6">
+    isLoading ? <Loader/> : 
+    (
+      <div className="bg-white border shadow-sm border-gray-200 rounded-md p-6 flex flex-col gap-6">
 
-      <form onSubmit={handleAddProduct} className="flex flex-col items-end">
-        <div className="flex flex-col md:flex-row gap-3 w-full relative">
-          <input
-            name="productName"
-            value={formData.productName}
-            onChange={handleChange}
-            onFocus={() => setShowSuggestions(true)}
-            placeholder="भाजीचे नाव टाइप करा किंवा निवडा"
-            className="input input-accent"
-            autoComplete="off"
-          />
+        <form onSubmit={handleAddProduct} className="flex flex-col items-end">
+          <div className="flex flex-col md:flex-row gap-3 w-full relative">
+            <div>
+              <label htmlFor="" className="label text-sm"> Product Name</label>
+              <input
+              name="productName"
+              value={formData.productName}
+              onChange={handleChange}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+              onFocus={() => setShowSuggestions(true)}
+              placeholder="भाजीचे नाव टाइप करा किंवा निवडा"
+              className="input input-accent"
+              autoComplete="off"
+            />
+            </div>
 
-          {/* Suggestion dropdown */}
-          {showSuggestions && filteredVeggies.length > 0 && (
-            <ul className="absolute top-10 left-0 md:w-[32%] w-full bg-white border border-teal-400 rounded-md shadow-md max-h-70 overflow-y-auto z-10">
-              {filteredVeggies.map((veg) => (
-                <li
-                  key={veg.id}
-                  onClick={() => handleSelectVeg(veg.marathiName)}
-                  className="px-3 py-2 w-full hover:bg-green-100 cursor-pointer"
-                >
-                  {veg.marathiName}
-                </li>
-              ))}
-            </ul>
-          )}
 
-          <input
-            name="weight"
-            value={formData.weight}
-            onKeyDown={(e)=>{
-              if(["e","E","+","-"].includes(e.key)) e.preventDefault();
-            }}
-            onChange={(e)=>{
-            const cleaned = e.target.value.replace(/[eE+\-]/g, "");
-              handleChange({target:{name:"weight",value:cleaned}})}}
-            type="number"
-            placeholder="Weight"
-            className="input input-accent"
-          />
+            {/* Suggestion dropdown */}
+            {showSuggestions && filteredVeggies.length > 0 && (
+              <ul className="absolute top-16 left-0 md:w-[36%] w-full bg-white border border-teal-400 rounded-md shadow-md max-h-70 overflow-y-auto z-10">
+                {filteredVeggies.map((veg) => (
+                  <li
+                    key={veg.id}
+                    onClick={() => handleSelectVeg(veg.marathiName)}
+                    className="px-3 py-2 w-full hover:bg-green-100 cursor-pointer"
+                  >
+                    {veg.marathiName}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div>
+                <label htmlFor="" className="label text-sm"> Weight</label>
+                <input
+                name="weight"
+                value={formData.weight}
+                onKeyDown={(e)=>{
+                  if(["e","E","+","-"].includes(e.key)) e.preventDefault();
+                }}
+                onChange={(e)=>{
+                const cleaned = e.target.value.replace(/[eE+\-]/g, "");
+                  handleChange({target:{name:"weight",value:cleaned}})}}
+                type="number"
+                placeholder="Weight"
+                className="input input-accent"
+              />
+            </div>
 
-          <input
-            name="rate"
-            value={formData.rate}
-            onKeyDown={(e)=>{if(["e","E","+","-"].includes(e.key)) e.preventDefault()}}
-            
-            onChange={(e)=>{
-              const cleaned = e.target.value.replace(/[eE+\-]/g,"");
-              handleChange({target:{name:"rate",value:cleaned}})
-            }}
-            type="number"
-            placeholder="Rate/kg"
-            className="input input-accent"
-          />
-        </div>
+            <div>
+                <label htmlFor="" className="label text-sm"> Rate</label>
+                <input
+                  name="rate"
+                  value={formData.rate}
+                  onKeyDown={(e)=>{if(["e","E","+","-"].includes(e.key)) e.preventDefault()}}
+                  
+                  onChange={(e)=>{
+                    const cleaned = e.target.value.replace(/[eE+\-]/g,"");
+                    handleChange({target:{name:"rate",value:cleaned}})
+                  }}
+                  type="number"
+                  placeholder="Rate/kg"
+                  className="input input-accent"
+                />
+              </div>
+          </div>
 
-        <button
-          type="submit"
-            className="w-full mt-5 md:w-fit px-5 py-2 bg-[#16C79A] text-white font-normal rounded-md hover:bg-[#11D18C] hover:shadow-md transition duration-200 cursor-pointer"
-        >
-          Add Product
-        </button>
-      </form>
-    </div>
+          <button
+            type="submit"
+              className="w-full mt-5 md:w-fit px-5 py-2 bg-[#16C79A] text-white font-normal rounded-md hover:bg-[#11D18C] hover:shadow-md transition duration-200 cursor-pointer"
+          >
+            Add Product
+          </button>
+        </form>
+      </div>
+    )
+
   );
 };
 
