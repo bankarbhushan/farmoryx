@@ -14,6 +14,7 @@
       >
         <nav>
           <ul className="space-y-2">
+            <MenuItem label="Wel Come" to="/dashbord/greet" />
             <MenuItem label="Dashboard" to="/dashbord/dashboard" />
             <MenuItem label="Bill" to="/dashbord/bill" />
             <MenuItem label="Veg List" to="/dashbord/veglist" />

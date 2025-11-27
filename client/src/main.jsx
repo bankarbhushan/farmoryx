@@ -14,6 +14,7 @@ import MerchantList from "./components/merchantlist/Merchantlist";
 import Bill from "./components/bill/Bill";
 import BillList from "./components/bill/BillList";
 import BillView from "./components/bill/BillView.jsx";
+import Greet from "./components/Greet/Greet.jsx";
 
 
 const router = createBrowserRouter([
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
         path: "dashbord",
         element: <Body />,
         children: [
+          { index:true, path: "greet", element: <Greet /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "bill", element: <Bill /> },
           { path: "veglist", element: <Veglist /> },
