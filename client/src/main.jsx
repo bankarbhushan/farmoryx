@@ -29,7 +29,8 @@ const router = createBrowserRouter([
         path: "dashbord",
         element: <Body />,
         children: [
-          { index:true, path: "greet", element: <Greet /> },
+          { index: true, element: <Greet /> },            // Default page after login
+          { path: "greet", element: <Greet /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "bill", element: <Bill /> },
           { path: "veglist", element: <Veglist /> },
