@@ -8,25 +8,45 @@ import NoDataCard from "../constants/NoDataCard";
 
 const FarmerList = () => {
   const [farmers, setFarmers] = useState([]);
+  const [filteredFarmers, setFilteredFarmers] = useState([]);
+
   const [newFarmer, setNewFarmer] = useState({ name: "", village: "", mobile: "" });
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editFarmer, setEditFarmer] = useState(null);
 
+  const [findFarmer,setFindFarmer] = useState("")
 
+console.log(findFarmer)
+
+// const handleSearch  = async (e) =>{
+//   setFindFarmer(e.taget.value);
+// }
+const handlesearch = (e) =>{
+    const value = e.target.value.toLowerCase();
+    setFindFarmer(value);
+    const filtered = farmers.filter((f) =>
+      f.name.toLowerCase().includes(value)
+    );
+    setFilteredFarmers(filtered);
+}
   const getFarmer = async () => {
     try {
       const res = await axios.get("http://localhost:3000/api/v1/farmer/feed");
 
       if (res.data.data) {
         setFarmers(res.data.data);
+        setFilteredFarmers(res.data.data);
       } else {
         setFarmers([]);
+        setFilteredFarmers([]);
       }
 
     } catch (error) {
       console.error("Error fetching farmers:", error.message);
       setFarmers([]);
+      setFilteredFarmers([]);
+
     }
   };
 
@@ -124,6 +144,7 @@ const FarmerList = () => {
           </div>
          
 
+
           <button
             onClick={() => {
               setEditFarmer(null);
@@ -135,6 +156,26 @@ const FarmerList = () => {
             + Add New Farmer
           </button>
         </div>
+        {/* search */}
+          <div className="mt-5 mb-5 flex items-end justify-end">
+            {/* <label htmlFor="" className="label mr-4">Search Farmer :  </label> */}
+            <label className="input border-[#17CF91] focus-within:border-[#17CF91] focus-within:outline-none">
+              <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </g>
+              </svg>
+              <input  type="search" required placeholder="Search" value={findFarmer} 
+                onChange={(e)=>handlesearch(e)} />
+            </label>
+         </div>
 
         {/* Modal */}
         <FarmerModal
@@ -147,7 +188,7 @@ const FarmerList = () => {
         />
 
         {
-          farmers.length === 0 ? <NoDataCard message="Famers"/> :
+          filteredFarmers.length === 0 ? <NoDataCard message="Famers"/> :
           (
             <div className="overflow-x-auto rounded-md">
               <table className="min-w-full">
@@ -162,7 +203,7 @@ const FarmerList = () => {
                 </thead>
 
                 <tbody>
-                  {farmers.map((farmer, index) => (
+                  {filteredFarmers.slice().sort((a, b) => a.name.localeCompare(b.name)).map((farmer, index) => (
                     <tr
                       key={index}
                       className={`

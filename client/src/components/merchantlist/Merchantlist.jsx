@@ -8,6 +8,8 @@ import NoDataCard from "../constants/NoDataCard";
 
 const MerchantList = () => {
   const [merchants, setMerchants] = useState([]);
+  const [filteredMerchants, setFilteredMerchants] = useState([]);
+  
   const [newMerchant, setNewMerchant] = useState({
     name: "",
     village: "",
@@ -19,7 +21,16 @@ const MerchantList = () => {
   const [showForm, setShowForm] = useState(false);
   const [editMerchant, setEditMerchant] = useState(null);
 
+  const [findMerchant,setFindMerchant] = useState("")
 
+  const handlesearch = (e) =>{
+    const value = e.target.value.toLowerCase();
+    setFindMerchant(value);
+    const filtered = merchants.filter((f) =>
+      f.name.toLowerCase().includes(value)
+    );
+    setFilteredMerchants(filtered);
+}
   // Fetch merchants
   const getMerchants = async () => {
     try {
@@ -27,12 +38,15 @@ const MerchantList = () => {
 
       if ((res.data.data)) {
         setMerchants(res.data.data);
+        setFilteredMerchants(res.data.data);
       } else {
         setMerchants([]);
+        setFilteredMerchants([]);
       }
     } catch (error) {
       console.error("Error fetching merchants:", error.message);
       setMerchants([]);
+      setFilteredMerchants([]);
     }
   };
 
@@ -155,6 +169,28 @@ const MerchantList = () => {
               + Add New Merchant
             </button>
           </div>
+            {/* search */}
+            <div className="mt-5 mb-5 flex items-end justify-end">
+              {/* <label htmlFor="" className="label mr-4">Search Farmer :  </label> */}
+            <label className="input border-[#17CF91] focus-within:border-[#17CF91] focus-within:outline-none">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <g
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    strokeWidth="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </g>
+                </svg>
+                <input  type="search" required placeholder="Search"
+                 value={findMerchant} 
+                  onChange={(e)=>handlesearch(e)} 
+                  />
+              </label>
+          </div>
 
           {/* Modal */}
           <MerchantModal
@@ -168,7 +204,7 @@ const MerchantList = () => {
 
           {/* Table */}
           {
-            merchants.length===0 ? <NoDataCard message="Merchants"/> :
+            filteredMerchants.length===0 ? <NoDataCard message="Merchants"/> :
             (
               <div className="overflow-x-auto rounded-md">
                 <table className="min-w-full">
@@ -184,7 +220,7 @@ const MerchantList = () => {
                   </thead>
 
                   <tbody>
-                    {merchants?.map((merchant, index) => (
+                    {filteredMerchants.slice().sort((a,b)=>a.name.localeCompare(b.name))?.map((merchant, index) => (
                       <tr key={index} className="hover:bg-gray-50 transition">
                         <td className="px-4 py-3 font-light">{index + 1}</td>
                         <td className="px-4 py-3 font-light">{merchant.name}</td>

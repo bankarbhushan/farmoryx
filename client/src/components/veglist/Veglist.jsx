@@ -8,6 +8,8 @@ import NoDataCard from "../constants/NoDataCard";
 
 const Veglist = () => {
   const [vegs, setVegs] = useState([]);
+  const [filteredVegs, setFilteredVegs] = useState([]);
+  
   const [isLoading, setIsLoading] = useState(true);
 
   const [showForm, setShowForm] = useState(false);
@@ -19,15 +21,37 @@ const Veglist = () => {
     englishName: ""
   });
 
+    const [findVeg,setFindVeg] = useState("")
+  
+const handlesearch  = (e) =>{
+  const value = e.target.value.toLowerCase();
+  setFindVeg(value);
+  const filtered = vegs.filter((f)=>{
+    return  f.hinglishName.toLowerCase().includes(value) || f.englishName.toLowerCase().includes(value)
+  }
+   
+  )
+    setFilteredVegs(filtered);
+}
+
   const getVeg = async () => {
     try {
       const res = await axios.get("http://localhost:3000/api/v1/veg/feed");
+      if(res.data.data){
       setVegs(res.data.data);
+      setFilteredVegs(res.data.data);
+      }else {
+      setVegs([]);
+      setFilteredVegs([]);
+      }
+
     } catch (error) {
       const msg = error.response?.data?.message || "Something went wrong";
       toast.error(msg);    
+      setVegs([]);
+      setFilteredVegs([]);
     }
-  };
+  }; 
 
   useEffect(() => {
     (async () => {
@@ -107,6 +131,7 @@ const Veglist = () => {
       toast.error(msg);    }
   };
 
+
   return (
     <div className="font-inter">
       {isLoading ? (
@@ -130,6 +155,28 @@ const Veglist = () => {
               + Add Vegetable
             </button>
           </div>
+            {/* search */}
+            <div className="mt-5 mb-5 flex items-end justify-end">
+              {/* <label htmlFor="" className="label mr-4">Search Farmer :  </label> */}
+            <label className="input border-[#17CF91] focus-within:border-[#17CF91] focus-within:outline-none">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <g
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    strokeWidth="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </g>
+                </svg>
+                <input  type="search" required placeholder="Search"
+                 value={findVeg} 
+                  onChange={(e)=>handlesearch(e)} 
+                  />
+              </label>
+          </div>
 
           <Vegmodal
             showForm={showForm}
@@ -141,14 +188,15 @@ const Veglist = () => {
           />
 
           {
-            vegs.length===0 ? <NoDataCard message="Vegetables"/>
+            filteredVegs.length===0 ? <NoDataCard message="Vegetables"/>
             :
             (
               <div className="overflow-x-auto rounded-md">
                 <table className="min-w-full">
                   <thead className="bg-gray-200 text-[#12202E]">
                     <tr>
-                      <th className="px-4 py-3 text-left font-normal">Marathi</th>
+                      <th className="px-4 py-3 text-left font-normal">ID</th> 
+                      <th className="px-4 py-3 text-left font-normal">Marathi</th> 
                       <th className="px-4 py-3 text-left font-normal">Hinglish</th>
                       <th className="px-4 py-3 text-left font-normal">English</th>
                       <th className="px-4 py-3 text-center font-normal">Actions</th>
@@ -156,8 +204,9 @@ const Veglist = () => {
                   </thead>
 
                   <tbody>
-                    {vegs.map((veg) => (
+                    {filteredVegs.map((veg,index) => (
                       <tr key={veg._id} className="hover:bg-gray-50 transition">
+                        <td className="px-4 font-light py-3">{index+1}</td>
                         <td className="px-4 font-light py-3">{veg.marathiName}</td>
                         <td className="px-4 font-light py-3">{veg.hinglishName}</td>
                         <td className="px-4 font-light py-3">{veg.englishName}</td>

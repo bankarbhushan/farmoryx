@@ -10,10 +10,25 @@ import { useNavigate } from "react-router";
 
 const BillList = () => {
   const [bills, setBills] = useState([]);
+    const [filtereBills, setFilteredBills] = useState([]);
+  
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
   // Toggle state — farmer / merchant bills
   const [billType, setBillType] = useState("farmer");
+
+  const [findBill,setFindBill] = useState("")
+    
+  const handlesearch  = (e) =>{
+    const value = e.target.value.toLowerCase();
+    setFindBill(value);
+    const filtered = bills.filter((f)=>{
+      return  f.userName.toLowerCase().includes(value) || f.userMobile.includes(value)
+    }
+     
+    )
+      setFilteredBills(filtered);
+  }
 
 
   const getBills = async () => {
@@ -24,13 +39,16 @@ const BillList = () => {
 
       if (Array.isArray(res.data.data)) {
         setBills(res.data.data);
+        setFilteredBills(res.data.data);
       } else {
         setBills([]);
+        setFilteredBills([]);
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Something went wrong";
       toast.error(msg); 
       setBills([]);
+      setFilteredBills([]);
     }
   };
 
@@ -104,9 +122,31 @@ const BillList = () => {
           </button>
         </div>
       </div>
+                  {/* search */}
+            <div className="mt-5 mb-5 flex items-end justify-end">
+              {/* <label htmlFor="" className="label mr-4">Search Farmer :  </label> */}
+            <label className="input border-[#17CF91] focus-within:border-[#17CF91] focus-within:outline-none">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <g
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    strokeWidth="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </g>
+                </svg>
+                <input  type="search" required placeholder="Search"
+                 value={findBill} 
+                  onChange={(e)=>handlesearch(e)} 
+                  />
+              </label>
+          </div>
 
       {/* No Data */}
-      {bills.length === 0 ? (
+      {filtereBills.length === 0 ? (
         <NoDataCard message="Bill" />
       ) : (
         <div className="overflow-x-auto rounded-md">
@@ -123,7 +163,7 @@ const BillList = () => {
             </thead>
 
             <tbody>
-              {bills.map((bill, index) => (
+              {filtereBills.map((bill, index) => (
                 <tr key={bill._id} className="hover:bg-gray-50 transition">
                   <td className="px-4 py-3 font-light">{index + 1}</td>
                   <td className="px-4 py-3 font-light">{bill.userName}</td>
