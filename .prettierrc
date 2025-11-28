@@ -1,6 +1,6 @@
 {
   "bracketSpacing": false,
-  "parser": "babylon",
+  "parser": "babel",
   "printWidth": 90,
   "singleQuote": true,
   "trailingComma": "all",

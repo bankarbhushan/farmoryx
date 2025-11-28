@@ -1,25 +1,18 @@
-// import express from "express";
-// import {
-//   createBill,
-//   deleteBill,
-//   getAllBill,
-//   updateBill,
-// } from "../controllers/bill.controller.js";
+import express from 'express'
+import {
+  allbills,
+  createBill,
+  deleteBill,
+  feedbill,
+  SingleBill,
+} from '../controllers/bill.controller.js'
 
-// const router = express.Router();
+const router = express.Router()
 
-// router.post("/reg", createBill);
-// router.get("/productfeed", getAllBill);
-// router.delete("/deleteproduct/:id", deleteBill);
-// router.patch("/updateproduct/:id", updateBill);
+router.route('/create').post(createBill)
+router.route('/feed').get(feedbill)
+router.route('/allbills').get(allbills)
+router.route('/delete/:id').delete(deleteBill)
+router.route('/singlebill/:id').get(SingleBill)
 
-// export default router;
-
-import express from "express"
-import { createBill } from "../controllers/bill.controller.js";
-
-const router = express.Router();
-
-router.route("/createbill").post(createBill)
-
-export  {router as billRouter};
+export {router as billRouter}

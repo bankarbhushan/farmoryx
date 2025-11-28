@@ -1,17 +1,13 @@
- // this is the program that will be the function of req ,res
+// this is the program that will be the function of req ,res
 const asyncHandler = (requestHandler) => {
   return (req, res, next) => {
-    Promise.resolve(requestHandler(req, res, next))
-      .catch((err) => next(err));
-  };
-};
+    Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err))
+  }
+}
 
-export { asyncHandler };
+export {asyncHandler}
 
-
-//here we pass the data and return the function 
-
-
+//here we pass the data and return the function
 
 // M2 to handle the async req,res
 

@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import validator from "validator";
+import mongoose, {Schema} from 'mongoose'
+import validator from 'validator'
 
 const merchantSchema = new Schema(
   {
@@ -16,27 +16,27 @@ const merchantSchema = new Schema(
       type: String,
       required: true,
       validate: {
-        validator: (value) => validator.isMobilePhone(value, "en-IN"),
-        message: "Invalid mobile number.",
+        validator: (value) => validator.isMobilePhone(value, 'en-IN'),
+        message: 'Invalid mobile number.',
       },
     },
 
     village: {
       type: String,
-      required: true
+      required: true,
     },
 
     businessName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
 
-    totalPurchasedAmount: { type: Number, default: 0 },
-    totalPaymentPending: { type: Number, default: 0 },
-    isActive: { type: Boolean, default: true }
+    totalPurchasedAmount: {type: Number, default: 0},
+    totalPaymentPending: {type: Number, default: 0},
+    isActive: {type: Boolean, default: true},
   },
-  { timestamps: true }
-);
+  {timestamps: true},
+)
 
-export const Merchant = mongoose.model("Merchant", merchantSchema);
+export const Merchant = mongoose.model('Merchant', merchantSchema)

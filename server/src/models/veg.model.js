@@ -1,27 +1,26 @@
-import mongoose ,{Schema} from "mongoose";
+import mongoose, {Schema} from 'mongoose'
 
 const vegSchema = new Schema(
   {
-     englishName : {
+    englishName: {
       type: String,
       trim: true,
-      index:true
+      index: true,
     },
     hinglishName: {
       type: String,
-      required: [true, "Hinglish name is required"],
+      required: [true, 'Hinglish name is required'],
       trim: true,
-      index:true
+      index: true,
     },
     marathiName: {
       type: String,
       trim: true,
-      required: [true, "Marathi name is required"],
-      index:true
+      required: [true, 'Marathi name is required'],
+      index: true,
     },
   },
-  { timestamps: true }
-);
+  {timestamps: true},
+)
 
-export const Vegetable = mongoose.model("Veg", vegSchema);
-
+export const Vegetable = mongoose.model('Veg', vegSchema)
