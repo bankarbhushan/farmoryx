@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, {useState} from 'react'
+import {NavLink} from 'react-router-dom'
 import {
   FaBars,
   FaHome,
@@ -8,11 +8,11 @@ import {
   FaUsers,
   FaUserTie,
   FaClipboardList,
-  FaHandshake
-} from "react-icons/fa";
+  FaHandshake,
+} from 'react-icons/fa'
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -30,7 +30,7 @@ const Sidebar = () => {
       <aside
         className={`
           fixed top-[73px] left-0 
-          ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
           md:translate-x-0
           transition-transform duration-300
           w-[280px] h-[calc(100vh-73px)]
@@ -40,15 +40,21 @@ const Sidebar = () => {
       >
         <nav>
           <ul className="space-y-2">
-
             <MenuItem label="Welcome" to="/dashbord/greet" icon={<FaHandshake />} />
             <MenuItem label="Dashboard" to="/dashbord/dashboard" icon={<FaHome />} />
             <MenuItem label="Bill" to="/dashbord/bill" icon={<FaFileInvoice />} />
-            <MenuItem label="Bill List" to="/dashbord/billlist" icon={<FaClipboardList />} />
+            <MenuItem
+              label="Bill List"
+              to="/dashbord/billlist"
+              icon={<FaClipboardList />}
+            />
             <MenuItem label="Farmer List" to="/dashbord/farmerlist" icon={<FaUsers />} />
-            <MenuItem label="Merchant List" to="/dashbord/merchantlist" icon={<FaUserTie />} />
+            <MenuItem
+              label="Merchant List"
+              to="/dashbord/merchantlist"
+              icon={<FaUserTie />}
+            />
             <MenuItem label="Veg List" to="/dashbord/veglist" icon={<FaLeaf />} />
-            
           </ul>
         </nav>
       </aside>
@@ -61,21 +67,19 @@ const Sidebar = () => {
         ></div>
       )}
     </>
-  );
-};
+  )
+}
 
-const MenuItem = ({ label, to, icon }) => {
+const MenuItem = ({label, to, icon}) => {
   return (
     <li>
       <NavLink
         to={to}
-        className={({ isActive }) =>
+        className={({isActive}) =>
           `cursor-pointer px-4 py-2 rounded-md font-semibold flex items-center gap-3 
           transition-all duration-200
           ${
-            isActive
-              ? "text-[#17CF91] bg-[#17CF911A]"
-              : "text-gray-700 hover:bg-gray-200"
+            isActive ? 'text-[#17CF91] bg-[#17CF911A]' : 'text-gray-700 hover:bg-gray-200'
           }`
         }
       >
@@ -83,7 +87,7 @@ const MenuItem = ({ label, to, icon }) => {
         {label}
       </NavLink>
     </li>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

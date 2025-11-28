@@ -1,171 +1,161 @@
-import { asyncHandler } from "../utils/asyncHandler.js";
-import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { Farmer } from "../models/farmer.model.js";
-
+import {asyncHandler} from '../utils/asyncHandler.js'
+import {ApiError} from '../utils/ApiError.js'
+import {ApiResponse} from '../utils/ApiResponse.js'
+import {Farmer} from '../models/farmer.model.js'
 
 // CREATE FARMER
 const createfarmer = asyncHandler(async (req, res) => {
   try {
-      const { name, mobile, village } = req.body;
+    const {name, mobile, village} = req.body
     if (!name || !mobile || !village) {
-      throw new ApiError(400, "All fields are required.");
+      throw new ApiError(400, 'All fields are required.')
     }
 
-    let isExistingFarmer = await Farmer.findOne({ mobile });
+    let isExistingFarmer = await Farmer.findOne({mobile})
     if (isExistingFarmer) {
-      throw new ApiError(409, "This farmer already exists.");
+      throw new ApiError(409, 'This farmer already exists.')
     }
 
-    const farmer = await Farmer.create({ name, mobile, village });
+    const farmer = await Farmer.create({name, mobile, village})
 
     return res
       .status(201)
-      .json(new ApiResponse(201, farmer, "Farmer created successfully."));
+      .json(new ApiResponse(201, farmer, 'Farmer created successfully.'))
   } catch (error) {
     //  HANDLE MONGOOSE VALIDATION ERRORS
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       const validationMessage = Object.values(error.errors)
         .map((err) => err.message)
-        .join(", ");
+        .join(', ')
 
       return res.status(400).json({
         success: false,
         message: validationMessage,
-      });
+      })
     }
 
     // OTHER ERRORS
-    return res
-      .status(error.statusCode || 500)
-      .json({
-        success: false,
-        message: error.message || "Something went wrong.",
-      });
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Something went wrong.',
+    })
   }
-});
+})
 
 // GET ALL FARMERS
 const feedfarmer = asyncHandler(async (req, res) => {
   try {
-    const farmers = await Farmer.find();
+    const farmers = await Farmer.find()
 
     if (!farmers.length) {
-      throw new ApiError(404, "No farmers found.");
+      throw new ApiError(404, 'No farmers found.')
     }
 
-    return res.status(200).json(
-      new ApiResponse(200, farmers, "All farmers fetched successfully.")
-    );
-  }catch (error) {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, farmers, 'All farmers fetched successfully.'))
+  } catch (error) {
     //  HANDLE MONGOOSE VALIDATION ERRORS
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       const validationMessage = Object.values(error.errors)
         .map((err) => err.message)
-        .join(", ");
+        .join(', ')
 
       return res.status(400).json({
         success: false,
         message: validationMessage,
-      });
+      })
     }
 
     // OTHER ERRORS
-    return res
-      .status(error.statusCode || 500)
-      .json({
-        success: false,
-        message: error.message || "Something went wrong.",
-      });
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Something went wrong.',
+    })
   }
-});
+})
 
 // UPDATE FARMER
 const updatefarmer = asyncHandler(async (req, res) => {
-  
   try {
-    const { id } = req.params;
-    const { name, village, mobile } = req.body;
+    const {id} = req.params
+    const {name, village, mobile} = req.body
 
     if (!name || !mobile || !village) {
-      throw new ApiError(400, "All fields are required.");
+      throw new ApiError(400, 'All fields are required.')
     }
 
-    const farmer = await Farmer.findById(id);
+    const farmer = await Farmer.findById(id)
     if (!farmer) {
-      throw new ApiError(404, "Farmer not found.");
+      throw new ApiError(404, 'Farmer not found.')
     }
 
     const updated = await Farmer.findByIdAndUpdate(
       id,
-      { name, village, mobile },
-      { new: true }
-    );
+      {name, village, mobile},
+      {new: true},
+    )
 
-    return res.status(200).json(
-      new ApiResponse(200, updated, "Farmer updated successfully.")
-    );
+    return res
+      .status(200)
+      .json(new ApiResponse(200, updated, 'Farmer updated successfully.'))
   } catch (error) {
     //  HANDLE MONGOOSE VALIDATION ERRORS
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       const validationMessage = Object.values(error.errors)
         .map((err) => err.message)
-        .join(", ");
+        .join(', ')
 
       return res.status(400).json({
         success: false,
         message: validationMessage,
-      });
+      })
     }
 
     // OTHER ERRORS
-    return res
-      .status(error.statusCode || 500)
-      .json({
-        success: false,
-        message: error.message || "Something went wrong.",
-      });
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Something went wrong.',
+    })
   }
-});
+})
 
 // DELETE FARMER
 
 const deletefarmer = asyncHandler(async (req, res) => {
   try {
-    const { id } = req.params;
+    const {id} = req.params
 
-    const existingFarmer = await Farmer.findById(id);
+    const existingFarmer = await Farmer.findById(id)
 
     if (!existingFarmer) {
-      throw new ApiError(404, "Farmer not found.");
+      throw new ApiError(404, 'Farmer not found.')
     }
 
-    const deletedFarmer = await Farmer.findByIdAndDelete(id);
+    const deletedFarmer = await Farmer.findByIdAndDelete(id)
 
-    return res.status(200).json(
-      new ApiResponse(200, deletedFarmer, "Farmer deleted successfully.")
-    );
+    return res
+      .status(200)
+      .json(new ApiResponse(200, deletedFarmer, 'Farmer deleted successfully.'))
   } catch (error) {
     //  HANDLE MONGOOSE VALIDATION ERRORS
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       const validationMessage = Object.values(error.errors)
         .map((err) => err.message)
-        .join(", ");
+        .join(', ')
 
       return res.status(400).json({
         success: false,
         message: validationMessage,
-      });
+      })
     }
 
     // OTHER ERRORS
-    return res
-      .status(error.statusCode || 500)
-      .json({
-        success: false,
-        message: error.message || "Something went wrong.",
-      });
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Something went wrong.',
+    })
   }
-});
+})
 
-export { createfarmer, feedfarmer, updatefarmer,deletefarmer };
+export {createfarmer, feedfarmer, updatefarmer, deletefarmer}

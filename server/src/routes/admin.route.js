@@ -15,7 +15,6 @@
 
 // export {adminRouter};
 
-
 // import { Router } from "express";
 // import { registerAdmin } from "../controllers/admin.controller.js";
 // const router = Router()
@@ -24,25 +23,23 @@
 
 // export default router;
 
-import express from "express";
-import { registerAdmin } from "../controllers/admin.controller.js";
-import { upload } from "../middlewares/multer.middleware.js"
+import express from 'express'
+import {registerAdmin} from '../controllers/admin.controller.js'
+import {upload} from '../middlewares/multer.middleware.js'
 
-const router = express.Router();
+const router = express.Router()
 
 // POST => /api/v1/admin/register
 // router.route("/register").post(upload.single({name:"avatar"}),registerAdmin)
 // router.route("/register").post(upload.single("avatar"), registerAdmin);
 // router.route("/register").post(upload.array("avatars", 5), registerAdmin);
 
-router.route("/register").post(
+router.route('/register').post(
   upload.fields([
-    { name: "avatar", maxCount: 1 },
-    { name: "documents", maxCount: 5 }
+    {name: 'avatar', maxCount: 1},
+    {name: 'documents', maxCount: 5},
   ]),
-  registerAdmin
-);
+  registerAdmin,
+)
 
-export { router as adminRouter };
-
-
+export {router as adminRouter}

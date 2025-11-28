@@ -1,12 +1,12 @@
-import React, { useCallback } from "react";
-import Particles from "react-particles";
-import { loadSlim } from "tsparticles-slim";
-import Business_Img from "../../assets/Images/Business_Img";
+import React, {useCallback} from 'react'
+import Particles from 'react-particles'
+import {loadSlim} from 'tsparticles-slim'
+import Business_Img from '../../assets/Images/Business_Img'
 
 const Greet = () => {
   const particlesInit = useCallback(async (engine) => {
-    await loadSlim(engine);
-  }, []);
+    await loadSlim(engine)
+  }, [])
 
   return (
     <div className="relative w-full h-full min-h-screen ">
@@ -16,23 +16,23 @@ const Greet = () => {
         init={particlesInit}
         className="absolute inset-0"
         options={{
-          fullScreen: { enable: false },
-          background: { color: "transparent" },
+          fullScreen: {enable: false},
+          background: {color: 'transparent'},
           particles: {
-            number: { value: 40 },
-            color: { value: "#17CF91" },
-            shape: { type: "circle" },
-            opacity: { value: 0.6 },
-            size: { value: { min: 2, max: 5 } },
+            number: {value: 40},
+            color: {value: '#17CF91'},
+            shape: {type: 'circle'},
+            opacity: {value: 0.6},
+            size: {value: {min: 2, max: 5}},
             move: {
               enable: true,
               speed: 2,
-              direction: "none",
+              direction: 'none',
               random: true,
               straight: false,
-              outModes: "out",
-            }
-          }
+              outModes: 'out',
+            },
+          },
         }}
       />
 
@@ -47,7 +47,7 @@ const Greet = () => {
         <Business_Img />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Greet;
+export default Greet

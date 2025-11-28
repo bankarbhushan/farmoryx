@@ -1,16 +1,9 @@
-import React from "react";
+import React from 'react'
 
-const DeleteModal = ({
-  id,
-  deleteItem,
-  displayName,
-  handleDelete,
-  item,
-}) => {
+const DeleteModal = ({id, deleteItem, displayName, handleDelete, item}) => {
   return (
     <dialog id={`delete_modal_${id}`} className="modal">
       <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
-        
         {/* Close Button */}
         <form method="dialog">
           <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
@@ -25,9 +18,9 @@ const DeleteModal = ({
 
         {/* Message */}
         <p className="py-4 text-sm text-gray-600">
-          Are you sure you want to delete{" "}
-          <span className="font-medium text-red-600">{displayName}</span>?  
-          This action cannot be undone.
+          Are you sure you want to delete{' '}
+          <span className="font-medium text-red-600">{displayName}</span>? This action
+          cannot be undone.
         </p>
 
         {/* Buttons */}
@@ -47,7 +40,7 @@ const DeleteModal = ({
         </div>
       </div>
     </dialog>
-  );
-};
+  )
+}
 
-export default DeleteModal;
+export default DeleteModal

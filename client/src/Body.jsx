@@ -1,28 +1,16 @@
-import React from "react";
-import Sidebar from "./components/layout/sidebar/Sidebar";
-import { Outlet } from "react-router-dom";
+import React from 'react'
+import Sidebar from './components/layout/sidebar/Sidebar'
+import {Outlet} from 'react-router-dom'
 
 const Body = () => {
   return (
     <div className="flex w-full min-h-screen bg-white">
-
-      {/* Sidebar (fixed) */}
       <Sidebar />
-
-      {/* Main Content */}
-      <main
-        className="
-          flex-1
-          bg-[#F8FAF8]
-          p-6
-          min-h-screen
-          ml-[280px]   /* Push content right equal to sidebar width */
-        "
-      >
+      <main className="flex-1 bg-[#F8FAF8] p-6 min-h-screen ml-[280px]">
         <Outlet />
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Body;
+export default Body

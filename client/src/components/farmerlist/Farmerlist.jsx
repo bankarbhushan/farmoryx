@@ -1,166 +1,162 @@
-import React, { useState, useEffect } from "react";
-import Wrapper from "../constants/Wrapper";
-import Loader from "../constants/Loader";
-import FarmerModal from "./FarmerModal";
-import toast from "react-hot-toast";
-import axios from "axios";
-import NoDataCard from "../constants/NoDataCard";
+import React, {useState, useEffect} from 'react'
+import Wrapper from '../constants/Wrapper'
+import Loader from '../constants/Loader'
+import FarmerModal from './FarmerModal'
+import toast from 'react-hot-toast'
+import axios from 'axios'
+import NoDataCard from '../constants/NoDataCard'
 
 const FarmerList = () => {
-  const [farmers, setFarmers] = useState([]);
-  const [filteredFarmers, setFilteredFarmers] = useState([]);
+  const [farmers, setFarmers] = useState([])
+  const [filteredFarmers, setFilteredFarmers] = useState([])
 
-  const [newFarmer, setNewFarmer] = useState({ name: "", village: "", mobile: "" });
-  const [isLoading, setIsLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editFarmer, setEditFarmer] = useState(null);
+  const [newFarmer, setNewFarmer] = useState({name: '', village: '', mobile: ''})
+  const [isLoading, setIsLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [editFarmer, setEditFarmer] = useState(null)
 
-  const [findFarmer,setFindFarmer] = useState("")
+  const [findFarmer, setFindFarmer] = useState('')
 
-console.log(findFarmer)
+  console.log(findFarmer)
 
-// const handleSearch  = async (e) =>{
-//   setFindFarmer(e.taget.value);
-// }
-const handlesearch = (e) =>{
-    const value = e.target.value.toLowerCase();
-    setFindFarmer(value);
-    const filtered = farmers.filter((f) =>
-      f.name.toLowerCase().includes(value)
-    );
-    setFilteredFarmers(filtered);
-}
+  // const handleSearch  = async (e) =>{
+  //   setFindFarmer(e.taget.value);
+  // }
+  const handlesearch = (e) => {
+    const value = e.target.value.toLowerCase()
+    setFindFarmer(value)
+    const filtered = farmers.filter((f) => f.name.toLowerCase().includes(value))
+    setFilteredFarmers(filtered)
+  }
   const getFarmer = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/farmer/feed");
+      const res = await axios.get('http://localhost:3000/api/v1/farmer/feed')
 
       if (res.data.data) {
-        setFarmers(res.data.data);
-        setFilteredFarmers(res.data.data);
+        setFarmers(res.data.data)
+        setFilteredFarmers(res.data.data)
       } else {
-        setFarmers([]);
-        setFilteredFarmers([]);
+        setFarmers([])
+        setFilteredFarmers([])
       }
-
     } catch (error) {
-      console.error("Error fetching farmers:", error.message);
-      setFarmers([]);
-      setFilteredFarmers([]);
-
+      console.error('Error fetching farmers:', error.message)
+      setFarmers([])
+      setFilteredFarmers([])
     }
-  };
+  }
 
   const handleOpenUpdate = (farmer) => {
-    setEditFarmer(farmer);
+    setEditFarmer(farmer)
     setNewFarmer({
       name: farmer.name,
       village: farmer.village,
       mobile: farmer.mobile,
-    });
-    openModal();
-  };
+    })
+    openModal()
+  }
 
   const handleAddFarmer = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/v1/farmer/reg",
-        newFarmer
-      );
+      const res = await axios.post('http://localhost:3000/api/v1/farmer/reg', newFarmer)
 
-      toast.success(res.data.message);
-      await getFarmer();
-      closeModal();
-      setNewFarmer({ name: "", village: "", mobile: "" });
+      toast.success(res.data.message)
+      await getFarmer()
+      closeModal()
+      setNewFarmer({name: '', village: '', mobile: ''})
     } catch (error) {
-      const msg = error.response?.data?.message || "Something went wrong";
-      toast.error(msg);
+      const msg = error.response?.data?.message || 'Something went wrong'
+      toast.error(msg)
     }
-  };
+  }
 
   const handleUpdateFarmer = async () => {
     try {
       const res = await axios.patch(
         `http://localhost:3000/api/v1/farmer/update/${editFarmer._id}`,
-        newFarmer
-      );
+        newFarmer,
+      )
 
-      toast.success(res.data.message);
-      await getFarmer();
-      closeModal();
+      toast.success(res.data.message)
+      await getFarmer()
+      closeModal()
 
-      setEditFarmer(null);
-      setNewFarmer({ name: "", village: "", mobile: "" });
+      setEditFarmer(null)
+      setNewFarmer({name: '', village: '', mobile: ''})
     } catch (error) {
-      const msg = error.response?.data?.message || "Update failed";
-      toast.error(msg);
+      const msg = error.response?.data?.message || 'Update failed'
+      toast.error(msg)
     }
-  };
+  }
 
   const handleDeleteFarmer = async (farmer) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/farmer/delete/${farmer._id}`
-      );
+        `http://localhost:3000/api/v1/farmer/delete/${farmer._id}`,
+      )
 
-      toast.success(res.data.message);
-     document.getElementById(`delete_modal_${farmer._id}`).close();
-      await getFarmer();
+      toast.success(res.data.message)
+      document.getElementById(`delete_modal_${farmer._id}`).close()
+      await getFarmer()
     } catch (error) {
-      toast.error(error.response?.data?.message || "Delete failed");
+      toast.error(error.response?.data?.message || 'Delete failed')
     }
-  };
+  }
 
   const openModal = () => {
-    setShowForm(true);
-    document.getElementById("my_modal_3").showModal();
-  };
+    setShowForm(true)
+    document.getElementById('my_modal_3').showModal()
+  }
 
   const closeModal = () => {
-    setShowForm(false);
-    document.getElementById("my_modal_3").close();
-  };
+    setShowForm(false)
+    document.getElementById('my_modal_3').close()
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);   
-      await getFarmer();    
-      setIsLoading(false);  
-    };
-    fetchData();
-  }, []);
+      setIsLoading(true)
+      await getFarmer()
+      setIsLoading(false)
+    }
+    fetchData()
+  }, [])
 
   return (
-  <div className="font-inter">
-    {isLoading ? (
-      <Loader />
-    ) : (
-      <Wrapper className="bg-[#FFFFFF] border border-[#E6E9EA] shadow-sm">
+    <div className="font-inter">
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Wrapper className="bg-[#FFFFFF] border border-[#E6E9EA] shadow-sm">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-5">
+            <div>
+              <h1 className="text-2xl font-semibold text-[#12202E]">Farmer List</h1>
+              <p className="text-sm font-extralight text-[#94A3B8] mt-1">
+                Manage and view details of all registered farmers in the network.
+              </p>
+            </div>
 
-        {/* Header */}
-        <div className="flex justify-between items-center mb-5">
-          <div>
-            <h1 className="text-2xl font-semibold text-[#12202E]">Farmer List</h1>
-            <p className="text-sm font-extralight text-[#94A3B8] mt-1">Manage and view details of all registered farmers in the network.</p>
+            <button
+              onClick={() => {
+                setEditFarmer(null)
+                setNewFarmer({name: '', village: '', mobile: ''})
+                openModal()
+              }}
+              className="px-4 py-2 rounded-md bg-gray-700 text-white font-light shadow hover:bg-gray-800 transition"
+            >
+              + Add New Farmer
+            </button>
           </div>
-         
-
-
-          <button
-            onClick={() => {
-              setEditFarmer(null);
-              setNewFarmer({ name: "", village: "", mobile: "" });
-              openModal();
-            }}
-            className="px-4 py-2 rounded-md bg-gray-700 text-white font-light shadow hover:bg-gray-800 transition"
-          >
-            + Add New Farmer
-          </button>
-        </div>
-        {/* search */}
+          {/* search */}
           <div className="mt-5 mb-5 flex items-end justify-end">
             {/* <label htmlFor="" className="label mr-4">Search Farmer :  </label> */}
             <label className="input border-[#17CF91] focus-within:border-[#17CF91] focus-within:outline-none">
-              <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <svg
+                className="h-[1em] opacity-50"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
                 <g
                   strokeLinejoin="round"
                   strokeLinecap="round"
@@ -172,24 +168,29 @@ const handlesearch = (e) =>{
                   <path d="m21 21-4.3-4.3"></path>
                 </g>
               </svg>
-              <input  type="search" required placeholder="Search" value={findFarmer} 
-                onChange={(e)=>handlesearch(e)} />
+              <input
+                type="search"
+                required
+                placeholder="Search"
+                value={findFarmer}
+                onChange={(e) => handlesearch(e)}
+              />
             </label>
-         </div>
+          </div>
 
-        {/* Modal */}
-        <FarmerModal
-          showForm={showForm}
-          newFarmer={newFarmer}
-          setNewFarmer={setNewFarmer}
-          handleAddFarmer={handleAddFarmer}
-          handleUpdateFarmer={handleUpdateFarmer}
-          isEdit={!!editFarmer}
-        />
+          {/* Modal */}
+          <FarmerModal
+            showForm={showForm}
+            newFarmer={newFarmer}
+            setNewFarmer={setNewFarmer}
+            handleAddFarmer={handleAddFarmer}
+            handleUpdateFarmer={handleUpdateFarmer}
+            isEdit={!!editFarmer}
+          />
 
-        {
-          filteredFarmers.length === 0 ? <NoDataCard message="Famers"/> :
-          (
+          {filteredFarmers.length === 0 ? (
+            <NoDataCard message="Famers" />
+          ) : (
             <div className="overflow-x-auto rounded-md">
               <table className="min-w-full">
                 <thead className="bg-gray-200 text-[#12202E]">
@@ -203,83 +204,90 @@ const handlesearch = (e) =>{
                 </thead>
 
                 <tbody>
-                  {filteredFarmers.slice().sort((a, b) => a.name.localeCompare(b.name)).map((farmer, index) => (
-                    <tr
-                      key={index}
-                      className={`
+                  {filteredFarmers
+                    .slice()
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((farmer, index) => (
+                      <tr
+                        key={index}
+                        className={`
                         hover:bg-gray-50 transition
                       `}
-                    >
-                      <td className="px-4 font-light py-3">{index + 1}</td>
-                      <td className="px-4 font-light  py-3">{farmer.name}</td>
-                      <td className="px-4 font-light  py-3">{farmer.village}</td>
-                      <td className="px-4 font-light  py-3">{farmer.mobile}</td>
-
-                      <td className="px-4 py-3 flex justify-center gap-3">
-                        <button
-                          onClick={() => handleOpenUpdate(farmer)}
-                          className="px-3 py-1 rounded-md bg-[#17CF91] font-light  text-white text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
-                        >
-                          Update
-                        </button>
-                      <button
-                        onClick={() => document.getElementById(`delete_modal_${farmer._id}`).showModal()}
-                        className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
                       >
-                        Delete
-                      </button>
+                        <td className="px-4 font-light py-3">{index + 1}</td>
+                        <td className="px-4 font-light  py-3">{farmer.name}</td>
+                        <td className="px-4 font-light  py-3">{farmer.village}</td>
+                        <td className="px-4 font-light  py-3">{farmer.mobile}</td>
 
-                      <dialog id={`delete_modal_${farmer._id}`} className="modal">
-                        <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
+                        <td className="px-4 py-3 flex justify-center gap-3">
+                          <button
+                            onClick={() => handleOpenUpdate(farmer)}
+                            className="px-3 py-1 rounded-md bg-[#17CF91] font-light  text-white text-sm shadow hover:bg-[#16C79A] transition cursor-pointer"
+                          >
+                            Update
+                          </button>
+                          <button
+                            onClick={() =>
+                              document
+                                .getElementById(`delete_modal_${farmer._id}`)
+                                .showModal()
+                            }
+                            className="px-3 py-1 rounded-md bg-[#FF6B6B] text-white text-sm font-light shadow hover:bg-[#E53E3E] transition cursor-pointer"
+                          >
+                            Delete
+                          </button>
 
-                          {/* Close Button */}
-                          <form method="dialog">
-                            <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
-                              ✕
-                            </button>
-                          </form>
+                          <dialog id={`delete_modal_${farmer._id}`} className="modal">
+                            <div className="modal-box rounded-xl border border-[#E6E9EA] shadow-md">
+                              {/* Close Button */}
+                              <form method="dialog">
+                                <button className="btn btn-sm btn-circle absolute right-2 top-2 bg-transparent hover:bg-gray-200">
+                                  ✕
+                                </button>
+                              </form>
 
-                          {/* Title */}
-                          <h3 className="text-lg font-semibold text-[#12202E]">Delete Farmer?</h3>
+                              {/* Title */}
+                              <h3 className="text-lg font-semibold text-[#12202E]">
+                                Delete Farmer?
+                              </h3>
 
-                          {/* Message */}
-                          <p className="py-4 text-sm text-gray-600">
-                            Are you sure you want to delete <span className="font-medium text-red-600">{farmer.name}</span>?  
-                            This action cannot be undone.
-                          </p>
+                              {/* Message */}
+                              <p className="py-4 text-sm text-gray-600">
+                                Are you sure you want to delete{' '}
+                                <span className="font-medium text-red-600">
+                                  {farmer.name}
+                                </span>
+                                ? This action cannot be undone.
+                              </p>
 
-                          {/* Buttons */}
-                          <div className="flex justify-end gap-3 mt-4">
-                            <button
-                              onClick={() => handleDeleteFarmer(farmer)}
-                              className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium cursor-pointer"
-                            >
-                              Yes, Delete
-                            </button>
+                              {/* Buttons */}
+                              <div className="flex justify-end gap-3 mt-4">
+                                <button
+                                  onClick={() => handleDeleteFarmer(farmer)}
+                                  className="px-4 py-2 bg-[#FF6B6B] text-white rounded-md hover:bg-[#E53E3E] transition font-medium cursor-pointer"
+                                >
+                                  Yes, Delete
+                                </button>
 
-                            <form method="dialog">
-                              <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium cursor-pointer">
-                                Cancel
-                              </button>
-                            </form>
-                          </div>
-                        </div>
-                      </dialog>
-
-                      </td>
-                    </tr>
-                  ))}
+                                <form method="dialog">
+                                  <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium cursor-pointer">
+                                    Cancel
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                          </dialog>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
-          )
-        }
+          )}
+        </Wrapper>
+      )}
+    </div>
+  )
+}
 
-
-      </Wrapper>
-    )}
-  </div>
-  );
-};
-
-export default FarmerList;
+export default FarmerList
