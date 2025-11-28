@@ -106,6 +106,40 @@ const feedbill = asyncHandler(async (req, res) => {
   }
 });
 
+const allbills = asyncHandler(async (req, res) => {
+  try {
+
+  const bills = await Bill.find();
+
+    if (!bills.length) {
+      throw new ApiError(404, "No Bill found.");
+    }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, bills, "Bill fetched successfully."));
+  }catch (error) {
+    //  HANDLE MONGOOSE VALIDATION ERRORS
+    if (error.name === "ValidationError") {
+      const validationMessage = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+
+      return res.status(400).json({
+        success: false,
+        message: validationMessage,
+      });
+    }
+
+    // OTHER ERRORS
+    return res
+      .status(error.statusCode || 500)
+      .json({
+        success: false,
+        message: error.message || "Something went wrong.",
+      });
+  }
+});
+
 // DELETE BILL
 const deleteBill = asyncHandler(async(req,res)=>{
   try {
@@ -178,5 +212,5 @@ const SingleBill = asyncHandler(async(req,res)=>{
 })
 
 
-export { createBill ,feedbill,deleteBill,SingleBill};
+export { createBill ,feedbill,deleteBill,SingleBill,allbills};
 

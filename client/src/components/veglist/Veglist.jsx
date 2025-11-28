@@ -133,11 +133,10 @@ const handlesearch  = (e) =>{
 
 
   return (
-    <div className="font-inter">
-      {isLoading ? (
+      isLoading ? (
         <Loader />
       ) : (
-        <Wrapper className="bg-[#FFFFFF] border border-[#E6E9EA] shadow-sm">
+        <Wrapper className="bg-[#FFFFFF] border border-[#E6E9EA] shadow-sm font-inter">
           <div className="flex justify-between items-center mb-5">
             <div>
               <h1 className="text-2xl font-semibold text-[#12202E]">Vegetable List</h1>
@@ -271,8 +270,7 @@ const handlesearch  = (e) =>{
           }
 
         </Wrapper>
-      )}
-    </div>
+      )
   );
 };
 

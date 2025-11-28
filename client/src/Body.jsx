@@ -4,10 +4,21 @@ import { Outlet } from "react-router-dom";
 
 const Body = () => {
   return (
-    <div className="flex min-h-screen w-full bg-[#ffff]">
+    <div className="flex w-full min-h-screen bg-white">
+
+      {/* Sidebar (fixed) */}
       <Sidebar />
 
-      <main className="ml-[280px] p-6 w-full bg-[#F8FAF8] min-h-screen">
+      {/* Main Content */}
+      <main
+        className="
+          flex-1
+          bg-[#F8FAF8]
+          p-6
+          min-h-screen
+          ml-[280px]   /* Push content right equal to sidebar width */
+        "
+      >
         <Outlet />
       </main>
     </div>
