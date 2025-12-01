@@ -4,6 +4,7 @@ import UserContext from '../../../context/userContext'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import Loader from '../../constants/Loader'
+import {Link} from 'react-router-dom'
 
 const InfoForm = () => {
   const {addGeneralInfo} = useBill()
@@ -25,6 +26,7 @@ const InfoForm = () => {
     externalVegCost: 0,
   })
   const {setUserName} = useContext(UserContext)
+  const [isUserSelected, setIsUserSelected] = useState(false)
 
   const getFarmer = async () => {
     try {
@@ -75,7 +77,16 @@ const InfoForm = () => {
 
     if (name === 'userType') {
       setShowUser(true)
-      setFormData({...formData, userName: '', userMobile: ''})
+      setShowSuggestions(false)
+
+      setFormData((prev) => ({
+        ...prev,
+        userType: value,
+        userName: '',
+        userMobile: '',
+      }))
+      setIsUserSelected(false)
+      return
     }
 
     if ((name === 'advancePaid' || name === 'externalVegCost') && value < 0) {
@@ -111,6 +122,8 @@ const InfoForm = () => {
       userName: user.name,
       userMobile: user.mobile,
     }))
+    setIsUserSelected(true) // disable input
+
     setShowSuggestions(false)
   }
 
@@ -174,43 +187,72 @@ const InfoForm = () => {
         </div>
 
         {/* Name + Suggestions */}
-        <div className="flex flex-col gap-1 relative" ref={suggestionRef}>
-          <label className="text-sm font-medium text-gray-700">
-            {formData.userType === 'farmer'
-              ? 'शेतकरी नाव'
-              : formData.userType === 'merchant'
-              ? 'व्यापारी नाव'
-              : 'नाव'}
-          </label>
+        {showUser && (
+          <div className="flex flex-col gap-1 relative" ref={suggestionRef}>
+            <label className="text-sm font-medium text-gray-700">
+              {formData.userType === 'farmer'
+                ? 'शेतकरी नाव'
+                : formData.userType === 'merchant'
+                ? 'व्यापारी नाव'
+                : 'नाव'}
+            </label>
 
-          <input
-            type="text"
-            name="userName"
-            value={formData.userName}
-            onChange={onChange}
-            placeholder="नाव टाइप करा किंवा निवडा"
-            className="input input-accent w-full"
-            onFocus={() => setShowSuggestions(true)}
-            autoComplete="off"
-            required
-          />
+            <input
+              type="text"
+              name="userName"
+              value={formData.userName}
+              onChange={onChange}
+              placeholder="नाव टाइप करा किंवा निवडा"
+              className="input input-accent w-full"
+              onFocus={() => !isUserSelected && setShowSuggestions(true)}
+              autoComplete="off"
+              required
+              disabled={isUserSelected}
+            />
 
-          {/* Suggestions */}
-          {showSuggestions && formData.userName && filteredUser.length > 0 && (
-            <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-10">
-              {filteredUser.map((user) => (
-                <li
-                  key={user.mobile}
-                  onClick={() => handleSelectUser(user)}
-                  className="px-3 py-2 hover:bg-green-100 cursor-pointer"
-                >
-                  {user.name}{' '}
-                  <span className="text-gray-500 text-sm">({user.village})</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+            {/* Suggestions */}
+            {showSuggestions && formData.userName && (
+              <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-10">
+                {filteredUser.length > 0 ? (
+                  filteredUser.map((user) => (
+                    <li
+                      key={user.mobile}
+                      onClick={() => handleSelectUser(user)}
+                      className="px-3 py-2 hover:bg-green-100 cursor-pointer"
+                    >
+                      {user.name}{' '}
+                      <span className="text-gray-500 text-sm">({user.village})</span>
+                    </li>
+                  ))
+                ) : (
+                  <>
+                    {/* No User Found */}
+                    <li className="px-3 py-2 text-gray-500 text-sm bg-red-50 cursor-default">
+                      No user found
+                    </li>
+
+                    {/* Add User Button */}
+                    <li className="px-3 py-2">
+                      {formData.userType === 'farmer' ? (
+                        <Link to="/dashbord/farmerlist">
+                          <button className="btn btn-sm w-full bg-gray-700 text-white hover:bg-gray-800">
+                            Add Farmer
+                          </button>
+                        </Link>
+                      ) : (
+                        <Link to="/dashbord/merchantlist">
+                          <button className="btn btn-sm w-full bg-gray-700 text-white hover:bg-gray-800">
+                            Add Merchant
+                          </button>
+                        </Link>
+                      )}
+                    </li>
+                  </>
+                )}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
 
       {/* --- Row 2: Mobile, Date, Patti --- */}
@@ -227,6 +269,7 @@ const InfoForm = () => {
             placeholder="मोबाईल नंबर टाइप करा"
             className="input input-accent w-full"
             required
+            disabled={isUserSelected}
           />
         </div>
 
@@ -301,7 +344,7 @@ const InfoForm = () => {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-5 py-2 bg-[#16C79A] text-white rounded-md hover:bg-[#11D18C] shadow-sm transition"
+          className="btn bg-[#16C79A] text-white rounded-md hover:bg-[#11D18C] transition"
         >
           Add Details
         </button>

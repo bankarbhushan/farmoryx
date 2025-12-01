@@ -32,9 +32,19 @@ const ActionButtons = () => {
 
   // Function to handle SAVE button
   const handleSave = async () => {
-    if (!generalInfo.userType || products.length === 0) {
-      toast.error('Please fill all data.')
-      return
+    if (!generalInfo.userType) return toast.error('Please select user type.')
+    if (!generalInfo.userName) return toast.error('Please enter user name.')
+    if (!generalInfo.userMobile || generalInfo.userMobile.length !== 10)
+      return toast.error('Please enter valid mobile number.')
+    if (!generalInfo.billDate) return toast.error('Please select bill date.')
+    if (!generalInfo.weekday) return toast.error('Please select weekday.')
+
+    if (products.length === 0) return toast.error('Please add at least one product.')
+
+    for (let p of products) {
+      if (!p.productName) return toast.error('Product name missing.')
+      if (!p.weight || Number(p.weight) <= 0) return toast.error('Weight must be valid.')
+      if (!p.rate || Number(p.rate) <= 0) return toast.error('Rate must be valid.')
     }
     setLoading(true)
     const calData = {
@@ -64,9 +74,10 @@ const ActionButtons = () => {
       setActionActive(true)
       toast.success(res.data.message || 'Bill Saved Successfully!')
       setLoading(false)
-    } catch (err) {
-      console.error('Error:', err)
-      toast.error('Fail to Bill Saved Successfully!')
+    } catch (error) {
+      const msg = error.response?.data?.message || 'Failed to save bill'
+      toast.error(msg);
+      setLoading(false)
     }
   }
 

@@ -1,10 +1,13 @@
 import {Bill} from '../models/bill.model.js'
+import { Merchant } from '../models/merchant.model.js'
+import { Farmer } from '../models/farmer.model.js'
 import {ApiError} from '../utils/ApiError.js'
 import {ApiResponse} from '../utils/ApiResponse.js'
 import {asyncHandler} from '../utils/asyncHandler.js'
 
 const createBill = asyncHandler(async (req, res) => {
   const {generalInfo, products, calculation} = req.body.bill
+  let userRecord
 
   if (!generalInfo || !products || !calculation) {
     throw new ApiError(400, 'Invalid bill format.')
@@ -31,6 +34,34 @@ const createBill = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Missing required fields.')
   }
 
+  if (userType === 'farmer') {
+    userRecord = await Farmer.findOne({name: userName.toLowerCase(), mobile: userMobile})
+  } else if (userType === 'merchant') {
+    userRecord = await Merchant.findOne({
+      name: userName.toLowerCase(),
+      mobile: userMobile,
+    })
+  } else {
+    throw new ApiError(400, 'Invalid user type')
+  }
+
+  if (!userRecord) {
+    throw new ApiError(400, `${userType} with this name and mobile does not exist`)
+  }
+
+  // if (
+  //   userType === 'merchant' &&
+  //   userRecord.businessName !== req.body.bill.generalInfo.businessName
+  // ) {
+  //   throw new ApiError(400, 'Merchant business name mismatch')
+  // }
+
+  // if (userType === 'farmer' && userRecord.village !== req.body.bill.generalInfo.village) {
+  //   throw new ApiError(400, 'Farmer village mismatch')
+  // }
+
+
+  // 
   if (!products || products.length === 0) {
     throw new ApiError(400, 'Products cannot be empty.')
   }

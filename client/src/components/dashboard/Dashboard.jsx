@@ -150,7 +150,7 @@ const Dashboard = () => {
         Full overview of daily activity, totals, revenue and insights.
       </p>
 
-      {/* A) TODAY SNAPSHOT */}
+      {/* TODAY SNAPSHOT */}
       <h2 className="text-lg font-medium text-gray-700 mb-3">Today’s Snapshot</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         <Card
@@ -171,7 +171,7 @@ const Dashboard = () => {
 
         <Card
           title="Today's Revenue"
-          value={todaysRevenue.toLocaleString('en-IN')}
+          value={`₹ ${todaysRevenue.toLocaleString('en-IN')}`}
           icon={<FaMoneyBillWave />}
           bgColor="bg-green-100"
           iconColor="text-green-600"
@@ -186,35 +186,7 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* B) Business Metrics */}
-      <h2 className="text-lg font-medium text-gray-700 mb-3">Business Metrics</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-        <Card
-          title="Total Volume"
-          value={`₹ ${formatMoney(totalVolume)}`}
-          icon={<FaChartBar />}
-          bgColor="bg-blue-100"
-          iconColor="text-blue-600"
-        />
-
-        <Card
-          title="Total Payout to Farmers"
-          value={`₹ ${formatMoney(totalPayoutFarmers)}`}
-          icon={<FiSend />}
-          bgColor="bg-green-100"
-          iconColor="text-green-600"
-        />
-
-        <Card
-          title="Total Collections from Merchants"
-          value={`₹ ${formatMoney(totalCollectionMerchants)}`}
-          icon={<FiArrowDownCircle />}
-          bgColor="bg-purple-100"
-          iconColor="text-purple-600"
-        />
-      </div>
-
-      {/* C) ANALYTICS */}
+      {/* ANALYTICS */}
       <h2 className="text-lg font-medium text-gray-700 mb-3">Analytics</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
         <Card
@@ -290,7 +262,7 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* D) OVERALL TOTALS */}
+      {/* OVERALL TOTALS */}
       <h2 className="text-lg font-medium text-gray-700 mb-3">Overall Totals</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
@@ -339,19 +311,19 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* E) MONTHLY PERFORMANCE */}
+      {/* MONTHLY PERFORMANCE */}
       <h2 className="text-lg font-medium text-gray-700 mb-3">Monthly Performance</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
         <Card
           title="This Month Revenue"
-          value={thisMonthRevenue.toLocaleString('en-IN')}
+          value={`₹ ${thisMonthRevenue.toLocaleString('en-IN')}`}
           icon={<FaChartPie />}
           bgColor="bg-teal-100"
           iconColor="text-teal-600"
         />
         <Card
           title="Previous Month Revenue"
-          value={previousMonthRevenue.toLocaleString('en-IN')}
+          value={`₹ ${previousMonthRevenue.toLocaleString('en-IN')}`}
           icon={<FaChartPie />}
           bgColor="bg-teal-100"
           iconColor="text-teal-600"
@@ -362,6 +334,34 @@ const Dashboard = () => {
           icon={<FaChartLine />}
           bgColor="bg-green-100"
           iconColor="text-green-600"
+        />
+      </div>
+      
+      {/*  Business Metrics */}
+      <h2 className="text-lg font-medium text-gray-700 mb-3">Business Metrics</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+        <Card
+          title="Total Volume"
+          value={`₹ ${formatMoney(totalVolume)}`}
+          icon={<FaChartBar />}
+          bgColor="bg-blue-100"
+          iconColor="text-blue-600"
+        />
+
+        <Card
+          title="Total Payout to Farmers"
+          value={`₹ ${formatMoney(totalPayoutFarmers)}`}
+          icon={<FiSend />}
+          bgColor="bg-green-100"
+          iconColor="text-green-600"
+        />
+
+        <Card
+          title="Total Collections from Merchants"
+          value={`₹ ${formatMoney(totalCollectionMerchants)}`}
+          icon={<FiArrowDownCircle />}
+          bgColor="bg-purple-100"
+          iconColor="text-purple-600"
         />
       </div>
     </Wrapper>
